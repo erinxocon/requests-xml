@@ -1,0 +1,31 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+requests = "*"
+pyquery = "*"
+fake-useragent = "*"
+parse = "*"
+"bs4" = "*"
+"w3lib" = "*"
+
+
+[dev-packages]
+
+twine = "*"
+pytest = "*"
+mypy = "*"
+pytest-asyncio = "*"
+rope = "*"
+"e1839a8" = {path = ".", editable = true}
+ipython = "*"
+
+
+[scripts]
+
+tests = "pytest -v -m ok"

@@ -20,7 +20,6 @@ from w3lib.encoding import html_to_unicode
 DEFAULT_ENCODING = 'utf-8'
 DEFAULT_URL = 'https://example.org/'
 DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8'
-DEFAULT_NEXT_SYMBOL = ['next', 'more', 'older']
 
 cleaner = Cleaner()
 cleaner.javascript = True
@@ -45,8 +44,6 @@ _Search = Result
 _Containing = Union[str, List[str]]
 _Links = Set[str]
 _Attrs = MutableMapping
-_Next = Union['HTML', List[str]]
-_NextSymbol = List[str]
 
 # Sanity checking.
 try:
@@ -70,7 +67,6 @@ class BaseParser:
         self.element = element
         self.session = session or XMLSession()
         self.url = url
-        self.skip_anchors = True
         self.default_encoding = default_encoding
         self._encoding = None
         self._xml = xml.encode(DEFAULT_ENCODING) if isinstance(xml, str) else xml
@@ -264,34 +260,9 @@ class BaseParser:
         return [r for r in findall(template, self.html)]
 
     @property
-    def rss_links(self) -> _Links:
+    def links(self) -> _Links:
         """All found links on page, in as–is form."""
-        return [x.text for x in self.xpath('//link')]
-
-
-    @property
-    def base_url(self) -> _URL:
-        """The base URL for the page. Supports the ``<base>`` tag
-        (`learn more <https://www.w3schools.com/tags/tag_base.asp>`_)."""
-
-        # Support for <base> tag.
-        base = self.find('base', first=True)
-        if base:
-            result = base.attrs.get('href', '').strip()
-            if result:
-                return result
-
-        # Parse the url to separate out the path
-        parsed = urlparse(self.url)._asdict()
-
-        # Remove any part of the path after the last '/'
-        parsed['path'] = '/'.join(parsed['path'].split('/')[:-1]) + '/'
-
-        # Reconstruct the url with the modified path
-        parsed = (v for v in parsed.values())
-        url = urlunparse(parsed)
-
-        return url
+        return set(x.text for x in self.xpath('//link'))
 
 
 class Element(BaseParser):
@@ -303,8 +274,8 @@ class Element(BaseParser):
     """
 
     __slots__ = [
-        'element', 'url', 'skip_anchors', 'default_encoding', '_encoding',
-        '_html', '_lxml', '_pq', '_attrs', 'session'
+        'element', 'url', 'default_encoding', '_encoding',
+        '_xml', '_lxml', '_pq', '_attrs', 'session'
     ]
 
     def __init__(self, *, element, url: _URL, default_encoding: _DefaultEncoding = None) -> None:
@@ -354,7 +325,6 @@ class XML(BaseParser):
             default_encoding=default_encoding
         )
         self.page = None
-        self.next_symbol = DEFAULT_NEXT_SYMBOL
 
     def __repr__(self) -> str:
         return f"<XML url={self.url!r}>"

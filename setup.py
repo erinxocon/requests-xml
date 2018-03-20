@@ -17,11 +17,11 @@ DESCRIPTION = 'XML Parsing for...people who still use xml.'
 URL = 'https://github.com/erinxocon/requests-xml'
 EMAIL = 'erinocon5@gmail.com'
 AUTHOR = "Erin O'Connell"
-VERSION = '0.1.0'
+VERSION = '0.1.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'requests', 'pyquery', 'fake-useragent', 'parse', 'bs4', 'w3lib'
+    'requests', 'pyquery', 'fake-useragent', 'parse', 'bs4', 'w3lib', 'xmljson'
 ]
 
 # The rest you shouldn't have to touch too much :)
@@ -68,7 +68,7 @@ class UploadCommand(Command):
 
         self.status('Publishing git tags…')
         os.system('git tag v{0}'.format(VERSION))
-        os.system('git push --tags')
+        # os.system('git push --tags')
 
         sys.exit()
 

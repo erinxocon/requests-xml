@@ -13,6 +13,7 @@ fake-useragent = "*"
 parse = "*"
 "bs4" = "*"
 "w3lib" = "*"
+xmljson = "*"
 
 
 [dev-packages]

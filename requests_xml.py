@@ -1,14 +1,16 @@
 import sys
 import asyncio
+import json
+from io import BytesIO
 from urllib.parse import urlparse, urlunparse, urljoin
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures._base import TimeoutError
 from functools import partial
-from typing import Set, Union, List, MutableMapping, Optional
+from typing import Set, Union, List, MutableMapping, Optional, Mapping
 
 import requests
 from pyquery import PyQuery
-
+from xmljson import badgerfish as bf
 from fake_useragent import UserAgent
 from lxml.html.clean import Cleaner
 import lxml
@@ -72,6 +74,7 @@ class BaseParser:
         self._xml = xml.encode(DEFAULT_ENCODING) if isinstance(xml, str) else xml
         self._lxml = None
         self._pq = None
+        self._docinfo = None
 
     @property
     def raw_xml(self) -> _RawXML:
@@ -103,6 +106,57 @@ class BaseParser:
         self._xml = xml
 
     @property
+    def pq(self) -> PyQuery:
+        """`PyQuery <https://pythonhosted.org/pyquery/>`_ representation
+        of the :class:`Element <Element>` or :class:`HTML <HTML>`.
+        """
+        if self._pq is None:
+            self._pq = PyQuery(self.raw_xml)
+
+        return self._pq
+
+    @property
+    def lxml(self) -> _LXML:
+        """`lxml <http://lxml.de>`_ representation of the
+        :class:`Element <Element>` or :class:`HTML <HTML>`.
+        """
+        if self._lxml is None:
+            self._lxml = etree.fromstring(self.raw_xml)
+
+        return self._lxml
+
+    @property
+    def text(self) -> _Text:
+        """The text content of the
+        :class:`Element <Element>` or :class:`HTML <HTML>`.
+        """
+        return self.pq.text()
+
+
+    @property
+    def links(self) -> _Links:
+        """All found links on page, in as–is form."""
+        return list(set(x.text for x in self.xpath('//link')))
+
+    @property
+    def docinfo(self) -> etree.DocInfo:
+        if self._docinfo is None:
+            self._docinfo = etree.parse(BytesIO(self.raw_xml)).docinfo
+
+        return self._docinfo
+
+
+    @property
+    def xml_version(self) -> _Text:
+        return self.docinfo.xml_version
+
+
+    @property
+    def root_tag(self) -> _Text:
+        return self.docinfo.root_name
+
+
+    @property
     def encoding(self) -> _Encoding:
         """The encoding string to be used, extracted from the HTML and
         :class:`HTMLResponse <HTMLResponse>` headers.
@@ -120,33 +174,6 @@ class BaseParser:
     def encoding(self, enc: str) -> None:
         """Property setter for self.encoding."""
         self._encoding = enc
-
-    @property
-    def pq(self) -> PyQuery:
-        """`PyQuery <https://pythonhosted.org/pyquery/>`_ representation
-        of the :class:`Element <Element>` or :class:`HTML <HTML>`.
-        """
-        if self._pq is None:
-            self._pq = PyQuery(self.raw_xml)
-
-        return self._pq
-
-    @property
-    def lxml(self) -> _LXML:
-        """`lxml <http://lxml.de>`_ representation of the
-        :class:`Element <Element>` or :class:`HTML <HTML>`.
-        """
-        if self._lxml is None:
-                self._lxml = etree.fromstring(self.raw_xml)
-
-        return self._lxml
-
-    @property
-    def text(self) -> _Text:
-        """The text content of the
-        :class:`Element <Element>` or :class:`HTML <HTML>`.
-        """
-        return self.pq.text()
 
 
     def find(self, selector: str = "*", *, containing: _Containing = None, clean: bool = False, first: bool = False, _encoding: str = None) -> _Find:
@@ -259,11 +286,6 @@ class BaseParser:
         """
         return [r for r in findall(template, self.html)]
 
-    @property
-    def links(self) -> _Links:
-        """All found links on page, in as–is form."""
-        return set(x.text for x in self.xpath('//link'))
-
 
 class Element(BaseParser):
     """An element of HTML.
@@ -337,7 +359,8 @@ class XMLResponse(requests.Response):
 
     def __init__(self) -> None:
         super(XMLResponse, self).__init__()
-        self._xml = None  # type: HTML
+        self._xml = None # type: HTML
+        self._json =  None # type: Maping
 
     @property
     def xml(self) -> XML:
@@ -345,6 +368,13 @@ class XMLResponse(requests.Response):
             self._xml = XML(url=self.url, xml=self.content, default_encoding=self.encoding)
 
         return self._xml
+
+    def json(self) -> Mapping:
+        if not self._json:
+            self._json = json.dumps(bf.data(etree.fromstring(self.content)))
+
+        return self._json
+
 
     @classmethod
     def _from_response(cls, response):

@@ -1,4 +1,4 @@
-Requests-Xml: XML Parsing for...humans who still use xml
+Requests-Xml: XML Parsing for humans
 ========================================================
 
 Installation

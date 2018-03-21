@@ -13,7 +13,7 @@ from setuptools import setup, Command
 
 # Package meta-data.
 NAME = 'requests-xml'
-DESCRIPTION = 'XML Parsing for...people who still use xml.'
+DESCRIPTION = 'XML Parsing for humans.'
 URL = 'https://github.com/erinxocon/requests-xml'
 EMAIL = 'erinocon5@gmail.com'
 AUTHOR = "Erin O'Connell"
@@ -21,7 +21,7 @@ VERSION = '0.1.1'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'requests', 'pyquery', 'fake-useragent', 'parse', 'bs4', 'w3lib', 'xmljson'
+    'requests', 'pyquery', 'fake-useragent', 'parse', 'w3lib', 'xmljson'
 ]
 
 # The rest you shouldn't have to touch too much :)

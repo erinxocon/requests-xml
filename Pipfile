@@ -11,7 +11,6 @@ requests = "*"
 pyquery = "*"
 fake-useragent = "*"
 parse = "*"
-"bs4" = "*"
 "w3lib" = "*"
 xmljson = "*"
 
@@ -25,6 +24,7 @@ pytest-asyncio = "*"
 rope = "*"
 "e1839a8" = {path = ".", editable = true}
 ipython = "*"
+sphinx = "*"
 
 
 [scripts]

@@ -23,10 +23,6 @@ DEFAULT_ENCODING = 'utf-8'
 DEFAULT_URL = 'https://example.org/'
 DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8'
 
-cleaner = Cleaner()
-cleaner.javascript = True
-cleaner.style = True
-
 useragent = None
 
 # Typing.
@@ -52,20 +48,20 @@ try:
     assert sys.version_info.major == 3
     assert sys.version_info.minor > 5
 except AssertionError:
-    raise RuntimeError('Requests-HTML requires Python 3.6+!')
+    raise RuntimeError('Requests-XML requires Python 3.6+!')
 
 
 class BaseParser:
-    """A basic HTML/Element Parser, for Humans.
+    """A basic XML/Element Parser, for Humans.
 
     :param element: The element from which to base the parsing upon.
     :param default_encoding: Which encoding to default to.
-    :param html: HTML from which to base the parsing upon (optional).
-    :param url: The URL from which the HTML originated, used for ``absolute_links``.
+    :param xml: XML from which to base the parsing upon (optional).
+    :param url: The URL from which the XML originated, used for ``absolute_links``.
 
     """
 
-    def __init__(self, *, element, session: 'XMLSession' = None, default_encoding: _DefaultEncoding = None, xml: _XML = None, url: _URL) -> None:
+    def __init__(self, *, element, session: 'XMLSession' = None, default_encoding: _DefaultEncoding = DEFAULT_ENCODING, xml: _XML = None, url: _URL) -> None:
         self.element = element
         self.session = session or XMLSession()
         self.url = url
@@ -78,7 +74,7 @@ class BaseParser:
 
     @property
     def raw_xml(self) -> _RawXML:
-        """Bytes representation of the HTML content.
+        """Bytes representation of the XML content.
         (`learn more <http://www.diveintopython3.net/strings.html>`_).
         """
         if self._xml:
@@ -88,7 +84,7 @@ class BaseParser:
 
     @property
     def xml(self) -> _BaseXML:
-        """Unicode representation of the HTML content
+        """Unicode representation of the XML content
         (`learn more <http://www.diveintopython3.net/strings.html>`_).
         """
         if self._xml:
@@ -158,8 +154,8 @@ class BaseParser:
 
     @property
     def encoding(self) -> _Encoding:
-        """The encoding string to be used, extracted from the HTML and
-        :class:`HTMLResponse <HTMLResponse>` headers.
+        """The encoding string to be used, extracted from the XML and
+        :class:`XMLResponse <XMLResponse>` header.
         """
         if self._encoding:
             return self._encoding
@@ -175,62 +171,6 @@ class BaseParser:
         """Property setter for self.encoding."""
         self._encoding = enc
 
-
-    def find(self, selector: str = "*", *, containing: _Containing = None, clean: bool = False, first: bool = False, _encoding: str = None) -> _Find:
-        """Given a CSS Selector, returns a list of
-        :class:`Element <Element>` objects or a single one.
-
-        :param selector: CSS Selector to use.
-        :param clean: Whether or not to sanitize the found HTML of ``<script>`` and ``<style>`` tags.
-        :param containing: If specified, only return elements that contain the provided text.
-        :param first: Whether or not to return just the first result.
-        :param _encoding: The encoding format.
-
-        Example CSS Selectors:
-
-        - ``a``
-        - ``a.someClass``
-        - ``a#someID``
-        - ``a[target=_blank]``
-
-        See W3School's `CSS Selectors Reference
-        <https://www.w3schools.com/cssref/css_selectors.asp>`_
-        for more details.
-
-        If ``first`` is ``True``, only returns the first
-        :class:`Element <Element>` found.
-        """
-
-        # Convert a single containing into a list.
-        if isinstance(containing, str):
-            containing = [containing]
-
-        encoding = _encoding or self.encoding
-        elements = [
-            Element(element=found, url=self.url, default_encoding=encoding)
-            for found in self.pq(selector)
-        ]
-
-        if containing:
-            elements_copy = elements.copy()
-            elements = []
-
-            for element in elements_copy:
-                if any([c.lower() in element.full_text.lower() for c in containing]):
-                    elements.append(element)
-
-            elements.reverse()
-
-        # Sanitize the found HTML.
-        if clean:
-            elements_copy = elements.copy()
-            elements = []
-
-            for element in elements_copy:
-                element.raw_html = lxml_html_tostring(cleaner.clean_html(element.lxml))
-                elements.append(element)
-
-        return _get_first_or_list(elements, first)
 
     def xpath(self, selector: str, *, clean: bool = False, first: bool = False, _encoding: str = None) -> _XPath:
         """Given an XPath selector, returns a list of
@@ -258,15 +198,6 @@ class BaseParser:
             if not isinstance(selection, etree._ElementUnicodeResult) else str(selection)
             for selection in selected
         ]
-
-        # Sanitize the found HTML.
-        if clean:
-            elements_copy = elements.copy()
-            elements = []
-
-            for element in elements_copy:
-                element.raw_html = lxml_html_tostring(cleaner.clean_html(element.lxml))
-                elements.append(element)
 
         return _get_first_or_list(elements, first)
 

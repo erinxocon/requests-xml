@@ -64,6 +64,7 @@ class BaseParser:
         self._lxml = None
         self._pq = None
         self._docinfo = None
+        self._json = None
 
     @property
     def raw_xml(self) -> _RawXML:
@@ -165,6 +166,35 @@ class BaseParser:
         self._encoding = enc
 
 
+    def json(self, conversion: _Text = 'badgerfish') -> Mapping:
+        """A JSON Representation of the XML.  Default is badgerfish.
+        :param conversion: Which conversion method to use. (`learn more <https://github.com/sanand0/xmljson#conventions>`_)
+        """
+        if not self._json:
+
+            if conversion is 'badgerfish':
+                from xmljson import badgerfish as serializer
+
+            elif conversion is 'abdera':
+                from xmljson import abdera as serializer
+
+            elif conversion is 'cobra':
+                from xmljson import cobra as serializer
+
+            elif conversion is 'gdata':
+                from xmljson import gdata as serializer
+
+            elif conversion is 'parker':
+                from xmljson import parker as serializer
+
+            elif conversion is 'yahoo':
+                from xmljson import yahoo as serializer
+
+            self._json = json.dumps(serializer.data(etree.fromstring(self.xml)))
+
+        return self._json
+
+
     def xpath(self, selector: str, *, clean: bool = False, first: bool = False, _encoding: str = None) -> _XPath:
         """Given an XPath selector, returns a list of
         :class:`Element <Element>` objects or a single one.
@@ -187,7 +217,7 @@ class BaseParser:
         selected = self.lxml.xpath(selector)
 
         elements = [
-            Element(element=selection, url=self.url, default_encoding=_encoding or self.encoding)
+            Element(element=selection, default_encoding=_encoding or self.encoding)
             if not isinstance(selection, etree._ElementUnicodeResult) else str(selection)
             for selection in selected
         ]
@@ -200,7 +230,7 @@ class BaseParser:
         :param template: The Parse template to use.
         """
 
-        return parse_search(template, self.html)
+        return findall(template, self.xml)
 
     def search_all(self, template: str) -> _Result:
         """Search the :class:`Element <Element>` (multiple times) for the given parse
@@ -208,7 +238,7 @@ class BaseParser:
 
         :param template: The Parse template to use.
         """
-        return [r for r in findall(template, self.html)]
+        return [r for r in findall(template, self.xml)]
 
 
 class Element(BaseParser):
@@ -281,42 +311,13 @@ class XMLResponse(requests.Response):
     def __init__(self) -> None:
         super(XMLResponse, self).__init__()
         self._xml = None # type: HTML
-        self._json =  None # type: Maping
 
     @property
     def xml(self) -> XML:
         if not self._xml:
-            self._xml = XML(url=self.url, xml=self.content, default_encoding=self.encoding)
+            self._xml = XML(xml=self.content, default_encoding=self.encoding)
 
         return self._xml
-
-    """A JSON Representation of the XML.  Default is badgerfish.
-    :param conversion: Which conversion method to use. (`learn more <https://github.com/sanand0/xmljson#conventions>`_)
-    """
-    def json(self, conversion: _Text = 'badgerfish') -> Mapping:
-        if not self._json:
-
-            if conversion is 'badgerfish':
-                from xmljson import badgerfish as serializer
-
-            elif conversion is 'abdera':
-                from xmljson import abdera as serializer
-
-            elif conversion is 'cobra':
-                from xmljson import cobra as serializer
-
-            elif conversion is 'gdata':
-                from xmljson import gdata as serializer
-
-            elif conversion is 'parker':
-                from xmljson import parker as serializer
-
-            elif conversion is 'yahoo':
-                from xmljson import yahoo as serializer
-
-            self._json = json.dumps(serializer.data(etree.fromstring(self.content)))
-
-        return self._json
 
 
     @classmethod

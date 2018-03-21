@@ -1,0 +1,563 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>requests_xml &#8212; requests-XML v0.3.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for requests_xml</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">BytesIO</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urlparse</span><span class="p">,</span> <span class="n">urlunparse</span><span class="p">,</span> <span class="n">urljoin</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="k">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures._base</span> <span class="k">import</span> <span class="ne">TimeoutError</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Mapping</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="k">import</span> <span class="n">PyQuery</span>
+<span class="kn">from</span> <span class="nn">fake_useragent</span> <span class="k">import</span> <span class="n">UserAgent</span>
+<span class="kn">import</span> <span class="nn">lxml</span>
+<span class="kn">from</span> <span class="nn">lxml</span> <span class="k">import</span> <span class="n">etree</span>
+<span class="kn">from</span> <span class="nn">parse</span> <span class="k">import</span> <span class="n">search</span> <span class="k">as</span> <span class="n">parse_search</span>
+<span class="kn">from</span> <span class="nn">parse</span> <span class="k">import</span> <span class="n">findall</span><span class="p">,</span> <span class="n">Result</span>
+<span class="kn">from</span> <span class="nn">w3lib.encoding</span> <span class="k">import</span> <span class="n">html_to_unicode</span>
+
+<span class="n">DEFAULT_ENCODING</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+<span class="n">DEFAULT_USER_AGENT</span> <span class="o">=</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8&#39;</span>
+
+<span class="n">useragent</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Typing.</span>
+<span class="n">_XPath</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;Element&#39;</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="s1">&#39;Element&#39;</span><span class="p">]</span>
+<span class="n">_Result</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="s1">&#39;Result&#39;</span><span class="p">],</span> <span class="s1">&#39;Result&#39;</span><span class="p">]</span>
+<span class="n">_XML</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">]</span>
+<span class="n">_BaseXML</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">_UserAgent</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">_DefaultEncoding</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">_RawXML</span> <span class="o">=</span> <span class="nb">bytes</span>
+<span class="n">_Encoding</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">_LXML</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">Element</span>
+<span class="n">_Text</span> <span class="o">=</span> <span class="nb">str</span>
+<span class="n">_Search</span> <span class="o">=</span> <span class="n">Result</span>
+<span class="n">_Containing</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+<span class="n">_Links</span> <span class="o">=</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="n">_Attrs</span> <span class="o">=</span> <span class="n">MutableMapping</span>
+
+<span class="c1"># Sanity checking.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">==</span> <span class="mi">3</span>
+    <span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span> <span class="o">&gt;</span> <span class="mi">5</span>
+<span class="k">except</span> <span class="ne">AssertionError</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Requests-XML requires Python 3.6+!&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">BaseParser</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A basic XML/Element Parser, for Humans.</span>
+
+<span class="sd">    :param element: The element from which to base the parsing upon.</span>
+<span class="sd">    :param default_encoding: Which encoding to default to.</span>
+<span class="sd">    :param xml: XML from which to base the parsing upon (optional).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="s1">&#39;XMLSession&#39;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">default_encoding</span><span class="p">:</span> <span class="n">_DefaultEncoding</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span><span class="p">,</span> <span class="n">xml</span><span class="p">:</span> <span class="n">_XML</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span> <span class="ow">or</span> <span class="n">XMLSession</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span> <span class="o">=</span> <span class="n">default_encoding</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">xml</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lxml</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_docinfo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_json</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">raw_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_RawXML</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Bytes representation of the XML content.</span>
+<span class="sd">        (`learn more &lt;http://www.diveintopython3.net/strings.html&gt;`_).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;unicode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xml</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_BaseXML</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Unicode representation of the XML content</span>
+<span class="sd">        (`learn more &lt;http://www.diveintopython3.net/strings.html&gt;`_).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_xml</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">etree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;unicode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="nd">@xml</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+
+    <span class="nd">@raw_xml</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">raw_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Property setter for self.html.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="n">xml</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pq</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyQuery</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;`PyQuery &lt;https://pythonhosted.org/pyquery/&gt;`_ representation</span>
+<span class="sd">        of the :class:`Element &lt;Element&gt;` or :class:`HTML &lt;HTML&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pq</span> <span class="o">=</span> <span class="n">PyQuery</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_xml</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pq</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">lxml</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_LXML</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;`lxml &lt;http://lxml.de&gt;`_ representation of the</span>
+<span class="sd">        :class:`Element &lt;Element&gt;` or :class:`HTML &lt;HTML&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lxml</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lxml</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_xml</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lxml</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;The text content of the</span>
+<span class="sd">        :class:`Element &lt;Element&gt;` or :class:`HTML &lt;HTML&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pq</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">links</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Links</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;All found links on page, in as–is form.  Only works for Atom feeds.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//link&#39;</span><span class="p">)))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">docinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">etree</span><span class="o">.</span><span class="n">DocInfo</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docinfo</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_docinfo</span> <span class="o">=</span> <span class="n">etree</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">raw_xml</span><span class="p">))</span><span class="o">.</span><span class="n">docinfo</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_docinfo</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xml_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">docinfo</span><span class="o">.</span><span class="n">xml_version</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">root_tag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Text</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">docinfo</span><span class="o">.</span><span class="n">root_name</span>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Encoding</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;The encoding string to be used, extracted from the XML and</span>
+<span class="sd">        :class:`XMLResponse &lt;XMLResponse&gt;` header.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span>
+
+        <span class="c1"># Scan meta tags for charset.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="o">=</span> <span class="n">html_to_unicode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_encoding</span>
+
+    <span class="nd">@encoding</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">encoding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enc</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Property setter for self.encoding.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="o">=</span> <span class="n">enc</span>
+
+
+    <span class="k">def</span> <span class="nf">json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conversion</span><span class="p">:</span> <span class="n">_Text</span> <span class="o">=</span> <span class="s1">&#39;badgerfish&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;A JSON Representation of the XML.  Default is badgerfish.</span>
+<span class="sd">        :param conversion: Which conversion method to use. (`learn more &lt;https://github.com/sanand0/xmljson#conventions&gt;`_)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_json</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;badgerfish&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">badgerfish</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="k">elif</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;abdera&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">abdera</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="k">elif</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;cobra&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">cobra</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="k">elif</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;gdata&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">gdata</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="k">elif</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;parker&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">parker</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="k">elif</span> <span class="n">conversion</span> <span class="ow">is</span> <span class="s1">&#39;yahoo&#39;</span><span class="p">:</span>
+                <span class="kn">from</span> <span class="nn">xmljson</span> <span class="k">import</span> <span class="n">yahoo</span> <span class="k">as</span> <span class="n">serializer</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">etree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xml</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_json</span>
+
+
+    <span class="k">def</span> <span class="nf">xpath</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">clean</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_XPath</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Given an XPath selector, returns a list of</span>
+<span class="sd">        :class:`Element &lt;Element&gt;` objects or a single one.</span>
+
+<span class="sd">        :param selector: XPath Selector to use.</span>
+<span class="sd">        :param clean: Whether or not to sanitize the found HTML of ``&lt;script&gt;`` and ``&lt;style&gt;`` tags.</span>
+<span class="sd">        :param first: Whether or not to return just the first result.</span>
+<span class="sd">        :param _encoding: The encoding format.</span>
+
+<span class="sd">        If a sub-selector is specified (e.g. ``//a/@href``), a simple</span>
+<span class="sd">        list of results is returned.</span>
+
+<span class="sd">        See W3School&#39;s `XPath Examples</span>
+<span class="sd">        &lt;https://www.w3schools.com/xml/xpath_examples.asp&gt;`_</span>
+<span class="sd">        for more details.</span>
+
+<span class="sd">        If ``first`` is ``True``, only returns the first</span>
+<span class="sd">        :class:`Element &lt;Element&gt;` found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lxml</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Element</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">selection</span><span class="p">,</span> <span class="n">default_encoding</span><span class="o">=</span><span class="n">_encoding</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">selection</span><span class="p">,</span> <span class="n">etree</span><span class="o">.</span><span class="n">_ElementUnicodeResult</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">selection</span> <span class="ow">in</span> <span class="n">selected</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">_get_first_or_list</span><span class="p">(</span><span class="n">elements</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Search the :class:`Element &lt;Element&gt;` for the given Parse template.</span>
+
+<span class="sd">        :param template: The Parse template to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">findall</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">search_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Result</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Search the :class:`Element &lt;Element&gt;` (multiple times) for the given parse</span>
+<span class="sd">        template.</span>
+
+<span class="sd">        :param template: The Parse template to use.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">findall</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">xml</span><span class="p">)]</span>
+
+
+<div class="viewcode-block" id="Element"><a class="viewcode-back" href="../index.html#requests_xml.Element">[docs]</a><span class="k">class</span> <span class="nc">Element</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An element of HTML.</span>
+
+<span class="sd">    :param element: The element from which to base the parsing upon.</span>
+<span class="sd">    :param default_encoding: Which encoding to default to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;element&#39;</span><span class="p">,</span> <span class="s1">&#39;default_encoding&#39;</span><span class="p">,</span> <span class="s1">&#39;_encoding&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;_xml&#39;</span><span class="p">,</span> <span class="s1">&#39;_lxml&#39;</span><span class="p">,</span> <span class="s1">&#39;_pq&#39;</span><span class="p">,</span> <span class="s1">&#39;_attrs&#39;</span><span class="p">,</span> <span class="s1">&#39;session&#39;</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">default_encoding</span><span class="p">:</span> <span class="n">_DefaultEncoding</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Element</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">element</span><span class="o">=</span><span class="n">element</span><span class="p">,</span> <span class="n">default_encoding</span><span class="o">=</span><span class="n">default_encoding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">element</span> <span class="o">=</span> <span class="n">element</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">attr</span><span class="p">]))</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;Element </span><span class="si">{}</span><span class="s2"> </span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">tag</span><span class="p">),</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attrs</span><span class="p">))</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attrs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_Attrs</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dictionary of the attributes of the :class:`Element &lt;Element&gt;`</span>
+<span class="sd">        (`learn more &lt;https://www.w3schools.com/tags/ref_attributes.asp&gt;`_).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+            <span class="c1"># Split class and rel up, as there are ussually many of them:</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">,</span> <span class="s1">&#39;rel&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span><span class="p">[</span><span class="n">attr</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attrs</span></div>
+
+
+<div class="viewcode-block" id="XML"><a class="viewcode-back" href="../index.html#requests_xml.XML">[docs]</a><span class="k">class</span> <span class="nc">XML</span><span class="p">(</span><span class="n">BaseParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An XML document, ready for parsing.</span>
+
+<span class="sd">    :param xml: XML from which to base the parsing upon (optional).</span>
+<span class="sd">    :param default_encoding: Which encoding to default to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">xml</span><span class="p">:</span> <span class="n">_XML</span><span class="p">,</span> <span class="n">default_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="c1"># Convert incoming unicode HTML into bytes.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">xml</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">DEFAULT_ENCODING</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">XML</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="c1"># Convert unicode HTML to bytes.</span>
+            <span class="n">element</span><span class="o">=</span><span class="n">PyQuery</span><span class="p">(</span><span class="n">xml</span><span class="p">)(</span><span class="s1">&#39;xml&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">PyQuery</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;&lt;xml&gt;</span><span class="si">{xml}</span><span class="s1">&lt;/xml&gt;&#39;</span><span class="p">)(</span><span class="s1">&#39;xml&#39;</span><span class="p">),</span>
+            <span class="n">xml</span><span class="o">=</span><span class="n">xml</span><span class="p">,</span>
+            <span class="n">default_encoding</span><span class="o">=</span><span class="n">default_encoding</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">f</span><span class="s2">&quot;&lt;XML element=</span><span class="si">{self.element!r}</span><span class="s2">&gt;&quot;</span></div>
+
+
+<span class="k">class</span> <span class="nc">XMLResponse</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Response</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An XML-enabled :class:`requests.Response &lt;requests.Response&gt;` object.</span>
+<span class="sd">    Effectively the same, but with an intelligent ``.xml`` property added.</span>
+<span class="sd">    The json method has also been changed to show a json representation of the xml.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">XMLResponse</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># type: HTML</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">xml</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">XML</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="o">=</span> <span class="n">XML</span><span class="p">(</span><span class="n">xml</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="n">default_encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_response</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">xml_r</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">xml_r</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xml_r</span>
+
+
+<div class="viewcode-block" id="user_agent"><a class="viewcode-back" href="../index.html#requests_xml.user_agent">[docs]</a><span class="k">def</span> <span class="nf">user_agent</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_UserAgent</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns an apparently legit user-agent, if not requested one of a specific</span>
+<span class="sd">    style. Defaults to a Chrome-style User-Agent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">useragent</span>
+    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">useragent</span><span class="p">)</span> <span class="ow">and</span> <span class="n">style</span><span class="p">:</span>
+        <span class="n">useragent</span> <span class="o">=</span> <span class="n">UserAgent</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">useragent</span><span class="p">[</span><span class="n">style</span><span class="p">]</span> <span class="k">if</span> <span class="n">style</span> <span class="k">else</span> <span class="n">DEFAULT_USER_AGENT</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_first_or_list</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">l</span>
+
+
+<div class="viewcode-block" id="XMLSession"><a class="viewcode-back" href="../index.html#requests_xml.XMLSession">[docs]</a><span class="k">class</span> <span class="nc">XMLSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A consumable session, for cookie persistence and connection pooling,</span>
+<span class="sd">    amongst other things.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_browser</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">XMLSession</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Mock a web browser&#39;s user agent.</span>
+        <span class="k">if</span> <span class="n">mock_browser</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_agent</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;response&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_response</span><span class="p">}</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_handle_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">XMLResponse</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Requests HTTP Response handler. Attaches .html property to</span>
+<span class="sd">        class:`requests.Response &lt;requests.Response&gt;` objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="o">.</span><span class="n">encoding</span><span class="p">:</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+
+<div class="viewcode-block" id="XMLSession.request"><a class="viewcode-back" href="../index.html#requests_xml.XMLSession.request">[docs]</a>    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">XMLResponse</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Makes an HTTP Request, with mocked User–Agent headers.</span>
+<span class="sd">        Returns a class:`HTTPResponse &lt;HTTPResponse&gt;`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Convert Request object into HTTPRequest object.</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">XMLSession</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">XMLResponse</span><span class="o">.</span><span class="n">_from_response</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div></div>
+
+
+<span class="k">class</span> <span class="nc">AsyncXMLSession</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; An async consumable session. &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">mock_browser</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set or create an event loop and a thread pool.</span>
+
+<span class="sd">            :param loop: Asyncio lopp to use.</span>
+<span class="sd">            :param workers: Amount of threads to use for executing async calls.</span>
+<span class="sd">                If not pass it will default to the number of processors on the</span>
+<span class="sd">                machine, multiplied by 5. &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Mock a web browser&#39;s user agent.</span>
+        <span class="k">if</span> <span class="n">mock_browser</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_agent</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hooks</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response_hook</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span> <span class="ow">or</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread_pool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">workers</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">response_hook</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">XMLResponse</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Change response enconding and replace it by a HTMLResponse. &quot;&quot;&quot;</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">DEFAULT_ENCODING</span>
+        <span class="k">return</span> <span class="n">XMLResponse</span><span class="o">.</span><span class="n">_from_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Partial original request func and run it in a thread. &quot;&quot;&quot;</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thread_pool</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p class="logo">
+    <a href="../index.html">
+      <img class="logo" src="../_static/requests-html-logo.png" title="https://kennethreitz.org/tattoos"/>
+    </a>
+  </p>
+
+  <p>
+    <iframe src="https://ghbtns.com/github-btn.html?user=kennethreitz&repo=requests-html&type=watch&count=true&size=large"
+      allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+  </p>
+
+  <p>
+    <strong>Requests-HTML</strong> intends to make parsing HTML (e.g. scraping the web) as
+  simple and intuitive as possible.
+  </p>
+
+  <h3>Stay Informed</h3>
+  <p>Receive updates on new releases and upcoming projects.</p>
+
+  <p><iframe src="https://ghbtns.com/github-btn.html?user=kennethreitz&type=follow&count=false"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+  <p><a href="https://twitter.com/kennethreitz" class="twitter-follow-button" data-show-count="false">Follow @kennethreitz</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+  <p><a href="https://saythanks.io/to/kennethreitz">Say Thanks!</a></p>
+  <p><a href="http://tinyletter.com/kennethreitz">Join Mailing List</a>.</p>
+
+  <h3>Other Projects</h3>
+
+  <p>More <a href="http://kennethreitz.org/">Kenneth Reitz</a> projects:</p>
+  <ul>
+      <li><a href="https://python-requests.org/">python-requests.org</a></li>
+      <li><a href="http://howtopython.org/">howtopython.org</a></li>
+      <li><a href="http://pipenv.org/">pipenv</a></li>
+      <li><a href="http://pep8.org/">pep8.org</a></li>
+      <li><a href="http://httpbin.org/">httpbin.org</a></li>
+      <li><a href="http://python-guide.org">The Python Guide</a></li>
+      <li><a href="https://github.com/kennethreitz/maya">Maya: Datetimes for Humans</a></li>
+      <li><a href="https://github.com/kennethreitz/records">Records: SQL for Humans</a></li>
+      <li><a href="http://www.git-legit.org">Legit: Git for Humans</a></li>
+      <li><a href="http://docs.python-tablib.org/en/latest/">Tablib: Tabular Datasets</a></li>
+  </ul><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><!-- Alabaster (krTheme++) Hacks -->
+
+
+<!-- CSS Adjustments (I'm very picky.) -->
+<style type="text/css">
+
+    /* Rezzy requires precise alignment. */
+    img.logo {margin-left: -20px!important;}
+
+    /* "Quick Search" should be capitalized. */
+    div#searchbox h3 {text-transform: capitalize;}
+
+    /* Make the document a little wider, less code is cut-off. */
+    div.document {width: 1008px;}
+
+    /* Much-improved spacing around code blocks. */
+    div.highlight pre {padding: 11px 14px;}
+
+    /* Remain Responsive! */
+    @media screen and (max-width: 1008px) {
+      div.sphinxsidebar {display: none;}
+      div.document {width: 100%!important;}
+
+      /* Have code blocks escape the document right-margin. */
+      div.highlight pre {margin-right: -30px;}
+    }
+
+  </style>
+
+
+  <!-- That was not a hack. That was art. -->
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018. An Erin O'Connell Project.
+      
+    </div>
+
+    
+    <a href="https://github.com/erinxocon/requests-xml" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

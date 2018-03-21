@@ -1,0 +1,835 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Requests-XML: XML Parsing for Humans &#8212; requests-XML v0.3.4 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="requests-xml-xml-parsing-for-humans">
+<h1>Requests-XML: XML Parsing for Humans<a class="headerlink" href="#requests-xml-xml-parsing-for-humans" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<a class="reference external image-reference" href="https://travis-ci.org/erinxocon/requests-xml"><img alt="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" src="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" /></a>
+<p>This library intends to make parsing XML as
+simple and intuitive as possible.  It is related
+to the amazing <a class="reference external" href="http://html.python-requests.org/">requests-html</a>
+and has much of the same experience, just with
+some more support for pure XML!</p>
+<p>When using this library you automatically get:</p>
+<ul class="simple">
+<li><em>XPath Selectors</em>, for the <em>brave</em> at heart.</li>
+<li>XML to JSON conversion thanks to <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a></li>
+<li>Mocked user-agent (like a real web browser).</li>
+<li>Connection–pooling and cookie persistence.</li>
+<li>The Requests experience you know and love, with magical XML parsing abilities.</li>
+</ul>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pipenv install requests-xml
+✨🍰✨
+</pre></div>
+</div>
+<p>Only <strong>Python 3.6</strong> is supported.</p>
+</div>
+<div class="section" id="tutorial-usage">
+<h1>Tutorial &amp; Usage<a class="headerlink" href="#tutorial-usage" title="Permalink to this headline">¶</a></h1>
+<p>Make a GET request to <a class="reference external" href="https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss/">nasa.gov</a>, using <a class="reference external" href="https://docs.python-requests.org/">Requests</a>:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">requests_xml</span> <span class="kn">import</span> <span class="n">XMLSession</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">session</span> <span class="o">=</span> <span class="n">XMLSession</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Grab a list of all links on the page, as–is (this only works for RSS feeds, or other feeds that happen to have <cite>link</cite> elements):</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">links</span>
+<span class="go">[&#39;http://www.nasa.gov/image-feature/from-the-earth-moon-and-beyond&#39;, &#39;http://www.nasa.gov/image-feature/jpl/pia21974/jupiter-s-colorful-cloud-belts&#39;, &#39;http://www.nasa.gov/&#39;, &#39;http://www.nasa.gov/image-feature/portrait-of-the-expedition-54-crew-on-the-space-station&#39;, ...]</span>
+</pre></div>
+</div>
+<p>XPath is the main supported way to query an element (<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx">learn more</a>):</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//item&#39;</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">&lt;Element &#39;item&#39; &gt;</span>
+</pre></div>
+</div>
+<p>Grab an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s text contents:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="go">The Beauty of Light</span>
+<span class="go">http://www.nasa.gov/image-feature/the-beauty-of-light</span>
+<span class="go">The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.</span>
+<span class="go">http://www.nasa.gov/image-feature/the-beauty-of-light</span>
+<span class="go">Wed, 21 Mar 2018 14:12 EDT</span>
+<span class="go">NASA Image of the Day</span>
+</pre></div>
+</div>
+<p>Introspect an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s attributes (<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes">learn more</a>):</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rss</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//rss&#39;</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rss</span><span class="o">.</span><span class="n">attrs</span>
+<span class="go">{&#39;version&#39;: &#39;2.0&#39;, &#39;{http://www.w3.org/XML/1998/namespace}base&#39;: &#39;http://www.nasa.gov/&#39;}</span>
+</pre></div>
+</div>
+<p>Render out an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s XML (note: namespaces will be applied to sub elements when grabbed):</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span><span class="o">.</span><span class="n">xml</span>
+<span class="go">&#39;&lt;item xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:itunes=&quot;http://www.itunes.com/dtds/podcast-1.0.dtd&quot; xmlns:media=&quot;http://search.yahoo.com/mrss/&quot;&gt; &lt;title&gt;The Beauty of Light&lt;/title&gt;\n &lt;link&gt;http://www.nasa.gov/image-feature/the-beauty-of-light&lt;/link&gt;\n &lt;description&gt;The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.&lt;/description&gt;\n &lt;enclosure url=&quot;http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg&quot; length=&quot;1267028&quot; type=&quot;image/jpeg&quot;/&gt;\n &lt;guid isPermaLink=&quot;false&quot;&gt;http://www.nasa.gov/image-feature/the-beauty-of-light&lt;/guid&gt;\n &lt;pubDate&gt;Wed, 21 Mar 2018 14:12 EDT&lt;/pubDate&gt;\n &lt;source url=&quot;http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss&quot;&gt;NASA Image of the Day&lt;/source&gt;\n&lt;/item&gt;&#39;</span>
+</pre></div>
+</div>
+<p>Select an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code> list within an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//enclosure&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
+<span class="go">&#39;http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg&#39;</span>
+</pre></div>
+</div>
+<p>Search for links within an element:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span><span class="o">.</span><span class="n">links</span>
+<span class="go">[&#39;http://www.nasa.gov/image-feature/the-beauty-of-light&#39;]</span>
+</pre></div>
+</div>
+<p>Search for text on the page.  This is useful if you wish to search out things between specific tags without using xpath:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;&lt;title&gt;{}&lt;/title&gt;)</span>
+<span class="go">&lt;Result (&#39;NASA Image of the Day&#39;,) {}&gt;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="json-support">
+<h1>JSON Support<a class="headerlink" href="#json-support" title="Permalink to this headline">¶</a></h1>
+<p>Using the great <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a> package, we convert the whole
+XML document into a JSON representation.  There are six different conversion convetions available.
+See the <a class="reference external" href="https://github.com/sanand0/xmljson#about">about</a> for what they are.  The default is <cite>badgerfish</cite>.
+If you wish to use a different conversion convention, pass in a string with the name of the convetion to the
+<cite>.json()</cite> method.</p>
+</div>
+<div class="section" id="using-without-requests">
+<h1>Using without Requests<a class="headerlink" href="#using-without-requests" title="Permalink to this headline">¶</a></h1>
+<p>You can also use this library without Requests:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">requests_xml</span> <span class="kn">import</span> <span class="n">XML</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">doc</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="go">&lt;employees&gt;</span>
+<span class="go">    &lt;person&gt;</span>
+<span class="go">        &lt;name value=&quot;Alice&quot;/&gt;</span>
+<span class="go">    &lt;/person&gt;</span>
+<span class="go">    &lt;person&gt;</span>
+<span class="go">        &lt;name value=&quot;Bob&quot;/&gt;</span>
+<span class="go">    &lt;/person&gt;</span>
+<span class="go">&lt;/employees&gt;</span>
+<span class="go">&quot;&quot;&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span> <span class="o">=</span> <span class="n">XML</span><span class="p">(</span><span class="n">xml</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">xml</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<span class="go">{</span>
+<span class="go">    &quot;employees&quot;: [{</span>
+<span class="go">        &quot;person&quot;: {</span>
+<span class="go">            &quot;name&quot;: {</span>
+<span class="go">                &quot;@value&quot;: &quot;Alice&quot;</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }, {</span>
+<span class="go">        &quot;person&quot;: {</span>
+<span class="go">            &quot;name&quot;: {</span>
+<span class="go">                &quot;@value&quot;: &quot;Bob&quot;</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }]</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-requests_xml">
+<span id="main-classes"></span><h2>Main Classes<a class="headerlink" href="#module-requests_xml" title="Permalink to this headline">¶</a></h2>
+<p>These classes are the main interface to <code class="docutils literal notranslate"><span class="pre">requests-xml</span></code>:</p>
+<dl class="class">
+<dt id="requests_xml.XML">
+<em class="property">class </em><code class="descclassname">requests_xml.</code><code class="descname">XML</code><span class="sig-paren">(</span><em>*, xml: Union[str, bytes], default_encoding: str = 'utf-8'</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/requests_xml.html#XML"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#requests_xml.XML" title="Permalink to this definition">¶</a></dt>
+<dd><p>An XML document, ready for parsing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xml</strong> – XML from which to base the parsing upon (optional).</li>
+<li><strong>default_encoding</strong> – Which encoding to default to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="requests_xml.XML.encoding">
+<code class="descname">encoding</code><a class="headerlink" href="#requests_xml.XML.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encoding string to be used, extracted from the XML and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">XMLResponse</span></code> header.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XML.json">
+<code class="descname">json</code><span class="sig-paren">(</span><em>conversion: str = 'badgerfish'</em><span class="sig-paren">)</span> &#x2192; Mapping<a class="headerlink" href="#requests_xml.XML.json" title="Permalink to this definition">¶</a></dt>
+<dd><p>A JSON Representation of the XML.  Default is badgerfish.
+:param conversion: Which conversion method to use. (<a class="reference external" href="https://github.com/sanand0/xmljson#conventions">learn more</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.links">
+<code class="descname">links</code><a class="headerlink" href="#requests_xml.XML.links" title="Permalink to this definition">¶</a></dt>
+<dd><p>All found links on page, in as–is form.  Only works for Atom feeds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.lxml">
+<code class="descname">lxml</code><a class="headerlink" href="#requests_xml.XML.lxml" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="http://lxml.de">lxml</a> representation of the
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.pq">
+<code class="descname">pq</code><a class="headerlink" href="#requests_xml.XML.pq" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://pythonhosted.org/pyquery/">PyQuery</a> representation
+of the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.raw_xml">
+<code class="descname">raw_xml</code><a class="headerlink" href="#requests_xml.XML.raw_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bytes representation of the XML content.
+(<a class="reference external" href="http://www.diveintopython3.net/strings.html">learn more</a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XML.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; parse.Result<a class="headerlink" href="#requests_xml.XML.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given Parse template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XML.search_all">
+<code class="descname">search_all</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Result')], _ForwardRef('Result')]<a class="headerlink" href="#requests_xml.XML.search_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> (multiple times) for the given parse
+template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.text">
+<code class="descname">text</code><a class="headerlink" href="#requests_xml.XML.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text content of the
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.XML.xml">
+<code class="descname">xml</code><a class="headerlink" href="#requests_xml.XML.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unicode representation of the XML content
+(<a class="reference external" href="http://www.diveintopython3.net/strings.html">learn more</a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XML.xpath">
+<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>clean: bool = False</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.XML.xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an XPath selector, returns a list of
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selector</strong> – XPath Selector to use.</li>
+<li><strong>clean</strong> – Whether or not to sanitize the found HTML of <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tags.</li>
+<li><strong>first</strong> – Whether or not to return just the first result.</li>
+<li><strong>_encoding</strong> – The encoding format.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If a sub-selector is specified (e.g. <code class="docutils literal notranslate"><span class="pre">//a/&#64;href</span></code>), a simple
+list of results is returned.</p>
+<p>See W3School’s <a class="reference external" href="https://www.w3schools.com/xml/xpath_examples.asp">XPath Examples</a>
+for more details.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="requests_xml.Element">
+<em class="property">class </em><code class="descclassname">requests_xml.</code><code class="descname">Element</code><span class="sig-paren">(</span><em>*</em>, <em>element</em>, <em>default_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/requests_xml.html#Element"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#requests_xml.Element" title="Permalink to this definition">¶</a></dt>
+<dd><p>An element of HTML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>element</strong> – The element from which to base the parsing upon.</li>
+<li><strong>default_encoding</strong> – Which encoding to default to.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="requests_xml.Element.attrs">
+<code class="descname">attrs</code><a class="headerlink" href="#requests_xml.Element.attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of the attributes of the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a>
+(<a class="reference external" href="https://www.w3schools.com/tags/ref_attributes.asp">learn more</a>).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.encoding">
+<code class="descname">encoding</code><a class="headerlink" href="#requests_xml.Element.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encoding string to be used, extracted from the XML and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">XMLResponse</span></code> header.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.Element.json">
+<code class="descname">json</code><span class="sig-paren">(</span><em>conversion: str = 'badgerfish'</em><span class="sig-paren">)</span> &#x2192; Mapping<a class="headerlink" href="#requests_xml.Element.json" title="Permalink to this definition">¶</a></dt>
+<dd><p>A JSON Representation of the XML.  Default is badgerfish.
+:param conversion: Which conversion method to use. (<a class="reference external" href="https://github.com/sanand0/xmljson#conventions">learn more</a>)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.links">
+<code class="descname">links</code><a class="headerlink" href="#requests_xml.Element.links" title="Permalink to this definition">¶</a></dt>
+<dd><p>All found links on page, in as–is form.  Only works for Atom feeds.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.lxml">
+<code class="descname">lxml</code><a class="headerlink" href="#requests_xml.Element.lxml" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="http://lxml.de">lxml</a> representation of the
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.pq">
+<code class="descname">pq</code><a class="headerlink" href="#requests_xml.Element.pq" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://pythonhosted.org/pyquery/">PyQuery</a> representation
+of the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.raw_xml">
+<code class="descname">raw_xml</code><a class="headerlink" href="#requests_xml.Element.raw_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bytes representation of the XML content.
+(<a class="reference external" href="http://www.diveintopython3.net/strings.html">learn more</a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.Element.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; parse.Result<a class="headerlink" href="#requests_xml.Element.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given Parse template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.Element.search_all">
+<code class="descname">search_all</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Result')], _ForwardRef('Result')]<a class="headerlink" href="#requests_xml.Element.search_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> (multiple times) for the given parse
+template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.text">
+<code class="descname">text</code><a class="headerlink" href="#requests_xml.Element.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text content of the
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">HTML</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="requests_xml.Element.xml">
+<code class="descname">xml</code><a class="headerlink" href="#requests_xml.Element.xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unicode representation of the XML content
+(<a class="reference external" href="http://www.diveintopython3.net/strings.html">learn more</a>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.Element.xpath">
+<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>clean: bool = False</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.Element.xpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an XPath selector, returns a list of
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selector</strong> – XPath Selector to use.</li>
+<li><strong>clean</strong> – Whether or not to sanitize the found HTML of <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tags.</li>
+<li><strong>first</strong> – Whether or not to return just the first result.</li>
+<li><strong>_encoding</strong> – The encoding format.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If a sub-selector is specified (e.g. <code class="docutils literal notranslate"><span class="pre">//a/&#64;href</span></code>), a simple
+list of results is returned.</p>
+<p>See W3School’s <a class="reference external" href="https://www.w3schools.com/xml/xpath_examples.asp">XPath Examples</a>
+for more details.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="requests_xml.user_agent">
+<code class="descclassname">requests_xml.</code><code class="descname">user_agent</code><span class="sig-paren">(</span><em>style=None</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/requests_xml.html#user_agent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#requests_xml.user_agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an apparently legit user-agent, if not requested one of a specific
+style. Defaults to a Chrome-style User-Agent.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="xml-sessions">
+<h2>XML Sessions<a class="headerlink" href="#xml-sessions" title="Permalink to this headline">¶</a></h2>
+<p>These sessions are for making HTTP requests:</p>
+<dl class="class">
+<dt id="requests_xml.XMLSession">
+<em class="property">class </em><code class="descclassname">requests_xml.</code><code class="descname">XMLSession</code><span class="sig-paren">(</span><em>mock_browser=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/requests_xml.html#XMLSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#requests_xml.XMLSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>A consumable session, for cookie persistence and connection pooling,
+amongst other things.</p>
+<dl class="method">
+<dt id="requests_xml.XMLSession.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes all adapters and as such the session</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a DELETE request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a GET request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.get_adapter">
+<code class="descname">get_adapter</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.get_adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the appropriate connection adapter for the given URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">requests.adapters.BaseAdapter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.get_redirect_target">
+<code class="descname">get_redirect_target</code><span class="sig-paren">(</span><em>resp</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.get_redirect_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receives a Response. Returns a redirect URI or <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.head">
+<code class="descname">head</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a HEAD request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.merge_environment_settings">
+<code class="descname">merge_environment_settings</code><span class="sig-paren">(</span><em>url</em>, <em>proxies</em>, <em>stream</em>, <em>verify</em>, <em>cert</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.merge_environment_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the environment and merge it with some settings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.mount">
+<code class="descname">mount</code><span class="sig-paren">(</span><em>prefix</em>, <em>adapter</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.mount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers a connection adapter to a prefix.</p>
+<p>Adapters are sorted in descending order by prefix length.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.options">
+<code class="descname">options</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a OPTIONS request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.patch">
+<code class="descname">patch</code><span class="sig-paren">(</span><em>url</em>, <em>data=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a PATCH request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>data</strong> – (optional) Dictionary, bytes, or file-like object to send in the body of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>url</em>, <em>data=None</em>, <em>json=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a POST request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>data</strong> – (optional) Dictionary, bytes, or file-like object to send in the body of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>.</li>
+<li><strong>json</strong> – (optional) json to send in the body of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.prepare_request">
+<code class="descname">prepare_request</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.prepare_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a <code class="xref py py-class docutils literal notranslate"><span class="pre">PreparedRequest</span></code> for
+transmission and returns it. The <code class="xref py py-class docutils literal notranslate"><span class="pre">PreparedRequest</span></code> has settings
+merged from the <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> instance and those of the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> – <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> instance to prepare with this
+session’s settings.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">requests.PreparedRequest</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>url</em>, <em>data=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a PUT request. Returns <code class="xref py py-class docutils literal notranslate"><span class="pre">Response</span></code> object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> – URL for the new <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code> object.</li>
+<li><strong>data</strong> – (optional) Dictionary, bytes, or file-like object to send in the body of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Request</span></code>.</li>
+<li><strong>**kwargs</strong> – Optional arguments that <code class="docutils literal notranslate"><span class="pre">request</span></code> takes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.rebuild_auth">
+<code class="descname">rebuild_auth</code><span class="sig-paren">(</span><em>prepared_request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.rebuild_auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>When being redirected we may want to strip authentication from the
+request to avoid leaking credentials. This method intelligently removes
+and reapplies authentication where possible to avoid credential loss.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.rebuild_method">
+<code class="descname">rebuild_method</code><span class="sig-paren">(</span><em>prepared_request</em>, <em>response</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.rebuild_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>When being redirected we may want to change the method of the request
+based on certain specs or browser behavior.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.rebuild_proxies">
+<code class="descname">rebuild_proxies</code><span class="sig-paren">(</span><em>prepared_request</em>, <em>proxies</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.rebuild_proxies" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method re-evaluates the proxy configuration by considering the
+environment variables. If we are redirected to a URL covered by
+NO_PROXY, we strip the proxy configuration. Otherwise, we set missing
+proxy keys for this URL (in case they were stripped by a previous
+redirect).</p>
+<p>This method also replaces the Proxy-Authorization header where
+necessary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.6)">dict</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.request">
+<code class="descname">request</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; requests_xml.XMLResponse<a class="reference internal" href="_modules/requests_xml.html#XMLSession.request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#requests_xml.XMLSession.request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes an HTTP Request, with mocked User–Agent headers.
+Returns a class:<cite>HTTPResponse &lt;HTTPResponse&gt;</cite>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.resolve_redirects">
+<code class="descname">resolve_redirects</code><span class="sig-paren">(</span><em>resp</em>, <em>req</em>, <em>stream=False</em>, <em>timeout=None</em>, <em>verify=True</em>, <em>cert=None</em>, <em>proxies=None</em>, <em>yield_requests=False</em>, <em>**adapter_kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.resolve_redirects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receives a Response. Returns a generator of Responses or Requests.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="requests_xml.XMLSession.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>request</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#requests_xml.XMLSession.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a given PreparedRequest.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">requests.Response</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p class="logo">
+    <a href="#">
+      <img class="logo" src="_static/requests-html-logo.png" title="https://kennethreitz.org/tattoos"/>
+    </a>
+  </p>
+
+  <p>
+    <iframe src="https://ghbtns.com/github-btn.html?user=erinxocon&repo=requests-xml&type=watch&count=true&size=large"
+      allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+  </p>
+
+  <p>
+    <strong>Requests-XML</strong> intends to make parsing XML as
+  simple and intuitive as possible.
+  </p>
+
+  <h3>Stay Informed</h3>
+
+  <p><iframe src="https://ghbtns.com/github-btn.html?user=erinxocon&type=follow&count=false"
+    allowtransparency="true" frameborder="0" scrolling="0" width="200" height="20"></iframe></p>
+
+  <p><a href="https://twitter.com/erinxocon" class="twitter-follow-button" data-show-count="false">Follow @kennethreitz</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
+  <p><a href="https://saythanks.io/to/erinxocon">Say Thanks!</a></p>
+
+  <h3>Other Projects</h3>
+
+  <p>More Erin O'Connell projects:</p>
+  <ul>
+      <li><a href="http://pipenv.org/">pipenv</a></li>
+      <li><a href="https://github.com/erinxocon/tpfd">Text Parsing Function Dispatcher</a></li>
+  </ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><!-- Alabaster (krTheme++) Hacks -->
+
+
+<!-- CSS Adjustments (I'm very picky.) -->
+<style type="text/css">
+
+    /* Rezzy requires precise alignment. */
+    img.logo {margin-left: -20px!important;}
+
+    /* "Quick Search" should be capitalized. */
+    div#searchbox h3 {text-transform: capitalize;}
+
+    /* Make the document a little wider, less code is cut-off. */
+    div.document {width: 1008px;}
+
+    /* Much-improved spacing around code blocks. */
+    div.highlight pre {padding: 11px 14px;}
+
+    /* Remain Responsive! */
+    @media screen and (max-width: 1008px) {
+      div.sphinxsidebar {display: none;}
+      div.document {width: 100%!important;}
+
+      /* Have code blocks escape the document right-margin. */
+      div.highlight pre {margin-right: -30px;}
+    }
+
+  </style>
+
+
+  <!-- That was not a hack. That was art. -->
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018. An Erin O'Connell Project.
+      
+    </div>
+
+    
+    <a href="https://github.com/erinxocon/requests-xml" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

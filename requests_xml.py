@@ -293,7 +293,7 @@ class XMLResponse(requests.Response):
     """A JSON Representation of the XML.  Default is badgerfish.
     :param conversion: Which conversion method to use. (`learn more <https://github.com/sanand0/xmljson#conventions>`_)
     """
-    def json(self, conversion: _Text = 'badgerfish') - > Mapping:
+    def json(self, conversion: _Text = 'badgerfish') -> Mapping:
         if not self._json:
 
             if conversion is 'badgerfish':

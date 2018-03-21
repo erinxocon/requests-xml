@@ -10,9 +10,7 @@ from typing import Set, Union, List, MutableMapping, Optional, Mapping
 
 import requests
 from pyquery import PyQuery
-from xmljson import badgerfish as bf
 from fake_useragent import UserAgent
-from lxml.html.clean import Cleaner
 import lxml
 from lxml import etree
 from parse import search as parse_search
@@ -20,20 +18,17 @@ from parse import findall, Result
 from w3lib.encoding import html_to_unicode
 
 DEFAULT_ENCODING = 'utf-8'
-DEFAULT_URL = 'https://example.org/'
 DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8'
 
 useragent = None
 
 # Typing.
-_Find = Union[List['Element'], 'Element']
 _XPath = Union[List[str], List['Element'], str, 'Element']
 _Result = Union[List['Result'], 'Result']
 _XML = Union[str, bytes]
 _BaseXML = str
 _UserAgent = str
 _DefaultEncoding = str
-_URL = str
 _RawXML = bytes
 _Encoding = str
 _LXML = etree.Element
@@ -57,14 +52,12 @@ class BaseParser:
     :param element: The element from which to base the parsing upon.
     :param default_encoding: Which encoding to default to.
     :param xml: XML from which to base the parsing upon (optional).
-    :param url: The URL from which the XML originated, used for ``absolute_links``.
 
     """
 
-    def __init__(self, *, element, session: 'XMLSession' = None, default_encoding: _DefaultEncoding = DEFAULT_ENCODING, xml: _XML = None, url: _URL) -> None:
+    def __init__(self, *, element, session: 'XMLSession' = None, default_encoding: _DefaultEncoding = DEFAULT_ENCODING, xml: _XML = None) -> None:
         self.element = element
         self.session = session or XMLSession()
-        self.url = url
         self.default_encoding = default_encoding
         self._encoding = None
         self._xml = xml.encode(DEFAULT_ENCODING) if isinstance(xml, str) else xml
@@ -222,17 +215,16 @@ class Element(BaseParser):
     """An element of HTML.
 
     :param element: The element from which to base the parsing upon.
-    :param url: The URL from which the HTML originated, used for ``absolute_links``.
     :param default_encoding: Which encoding to default to.
     """
 
     __slots__ = [
-        'element', 'url', 'default_encoding', '_encoding',
+        'element', 'default_encoding', '_encoding',
         '_xml', '_lxml', '_pq', '_attrs', 'session'
     ]
 
-    def __init__(self, *, element, url: _URL, default_encoding: _DefaultEncoding = None) -> None:
-        super(Element, self).__init__(element=element, url=url, default_encoding=default_encoding)
+    def __init__(self, *, element, default_encoding: _DefaultEncoding = None) -> None:
+        super(Element, self).__init__(element=element, default_encoding=default_encoding)
         self.element = element
         self._attrs = None
 
@@ -257,14 +249,13 @@ class Element(BaseParser):
 
 
 class XML(BaseParser):
-    """An HTML document, ready for parsing.
+    """An XML document, ready for parsing.
 
-    :param url: The URL from which the HTML originated, used for ``absolute_links``.
-    :param html: HTML from which to base the parsing upon (optional).
+    :param xml: XML from which to base the parsing upon (optional).
     :param default_encoding: Which encoding to default to.
     """
 
-    def __init__(self, *, url: str = DEFAULT_URL, xml: _XML, default_encoding: str = DEFAULT_ENCODING) -> None:
+    def __init__(self, *, xml: _XML, default_encoding: str = DEFAULT_ENCODING) -> None:
 
         # Convert incoming unicode HTML into bytes.
         if isinstance(xml, str):
@@ -274,18 +265,17 @@ class XML(BaseParser):
             # Convert unicode HTML to bytes.
             element=PyQuery(xml)('xml') or PyQuery(f'<xml>{xml}</xml>')('xml'),
             xml=xml,
-            url=url,
             default_encoding=default_encoding
         )
-        self.page = None
 
     def __repr__(self) -> str:
-        return f"<XML url={self.url!r}>"
+        return f"<XML element={self.element!r}>"
 
 
 class XMLResponse(requests.Response):
-    """An HTML-enabled :class:`requests.Response <requests.Response>` object.
-    Effectively the same, but with an intelligent ``.html`` property added.
+    """An XML-enabled :class:`requests.Response <requests.Response>` object.
+    Effectively the same, but with an intelligent ``.xml`` property added.
+    The json method has also been changed to show a json representation of the xml.
     """
 
     def __init__(self) -> None:
@@ -300,9 +290,31 @@ class XMLResponse(requests.Response):
 
         return self._xml
 
-    def json(self) -> Mapping:
+    """A JSON Representation of the XML.  Default is badgerfish.
+    :param conversion: Which conversion method to use. (`learn more <https://github.com/sanand0/xmljson#conventions>`_)
+    """
+    def json(self, conversion: _Text = 'badgerfish') - > Mapping:
         if not self._json:
-            self._json = json.dumps(bf.data(etree.fromstring(self.content)))
+
+            if conversion is 'badgerfish':
+                from xmljson import badgerfish as serializer
+
+            elif conversion is 'abdera':
+                from xmljson import abdera as serializer
+
+            elif conversion is 'cobra':
+                from xmljson import cobra as serializer
+
+            elif conversion is 'gdata':
+                from xmljson import gdata as serializer
+
+            elif conversion is 'parker':
+                from xmljson import parker as serializer
+
+            elif conversion is 'yahoo':
+                from xmljson import yahoo as serializer
+
+            self._json = json.dumps(serializer.data(etree.fromstring(self.content)))
 
         return self._json
 

@@ -3,7 +3,7 @@ Requests-XML: XML Parsing for Humans
 
 .. image:: https://travis-ci.org/erinxocon/requests-xml.svg?branch=master
     :target: https://travis-ci.org/erinxocon/requests-xml
-.. image:: https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000
+.. image:: https://img.shields.io/pypi/v/requests-xml.svg?maxAge=10000
     :target: https://pypi.python.org/pypi/requests-xml/
 .. image:: https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000
     :target: https://opensource.org/licenses/MIT

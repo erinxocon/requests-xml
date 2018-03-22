@@ -54,7 +54,7 @@ Grab a list of all links on the page, as–is (this only works for RSS feeds, or
     ['http://www.nasa.gov/image-feature/from-the-earth-moon-and-beyond', 'http://www.nasa.gov/image-feature/jpl/pia21974/jupiter-s-colorful-cloud-belts', 'http://www.nasa.gov/', 'http://www.nasa.gov/image-feature/portrait-of-the-expedition-54-crew-on-the-space-station', ...]
 
 
-XPath is the main supported way to query an element (`learn more <https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx>`_):
+XPath is the main supported way to query an element. (`learn more <https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx>`_):
 
 .. code-block:: pycon
 
@@ -111,8 +111,9 @@ Search for text on the page.  This is useful if you wish to search out things be
     >>> r.xml.search('<title>{}</title>)
     <Result ('NASA Image of the Day',) {}>
 
+
 Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
-contains certain text:
+contains certain text.  This can be used as another easy way to grab an element without an xpath:
 
 .. code-block:: pycon
 
@@ -121,6 +122,10 @@ contains certain text:
 
     >>> light_title[0].text
     'The Beauty of Light'
+
+Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
+to work with straight xml, go for it!
 
 JSON Support
 ============

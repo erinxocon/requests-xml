@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Requests-XML: XML Parsing for Humans &#8212; requests-XML v0.2.2 documentation</title>
+    <title>Requests-XML: XML Parsing for Humans &#8212; requests-XML v0.2.3 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -34,7 +34,7 @@
 <div class="toctree-wrapper compound">
 </div>
 <a class="reference external image-reference" href="https://travis-ci.org/erinxocon/requests-xml"><img alt="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" src="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" /></a>
-<a class="reference external image-reference" href="https://pypi.python.org/pypi/requests-xml/"><img alt="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=100000" /></a>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/requests-xml/"><img alt="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" /></a>
 <a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" /></a>
 <p>This library intends to make parsing XML as
 simple and intuitive as possible.  It is related
@@ -202,12 +202,22 @@ If you wish to use a different conversion convention, pass in a string with the 
 <dt id="requests_xml.XML.find">
 <code class="descname">find</code><span class="sig-paren">(</span><em>selector: str = '*'</em>, <em>containing: Union[str</em>, <em>typing.List[str]] = None</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Element')], _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.XML.find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a simple element name, returns a list of
-<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.
-:param selector: Element name to find.
-:param containing: If specified, only return elements that contain the provided text.
-:param first: Whether or not to return just the first result.
-:param _encoding: The encoding format.
-If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selector</strong> – Element name to find.</li>
+<li><strong>containing</strong> – If specified, only return elements that contain the provided text.</li>
+<li><strong>first</strong> – Whether or not to return just the first result.</li>
+<li><strong>_encoding</strong> – The encoding format.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
 <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
 </dd></dl>
 
@@ -285,7 +295,6 @@ template.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selector</strong> – XPath Selector to use.</li>
-<li><strong>clean</strong> – Whether or not to sanitize the found HTML of <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tags.</li>
 <li><strong>first</strong> – Whether or not to return just the first result.</li>
 <li><strong>_encoding</strong> – The encoding format.</li>
 </ul>
@@ -337,12 +346,22 @@ for more details.</p>
 <dt id="requests_xml.Element.find">
 <code class="descname">find</code><span class="sig-paren">(</span><em>selector: str = '*'</em>, <em>containing: Union[str</em>, <em>typing.List[str]] = None</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Element')], _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.Element.find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a simple element name, returns a list of
-<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.
-:param selector: Element name to find.
-:param containing: If specified, only return elements that contain the provided text.
-:param first: Whether or not to return just the first result.
-:param _encoding: The encoding format.
-If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>selector</strong> – Element name to find.</li>
+<li><strong>containing</strong> – If specified, only return elements that contain the provided text.</li>
+<li><strong>first</strong> – Whether or not to return just the first result.</li>
+<li><strong>_encoding</strong> – The encoding format.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
 <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
 </dd></dl>
 
@@ -420,7 +439,6 @@ template.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>selector</strong> – XPath Selector to use.</li>
-<li><strong>clean</strong> – Whether or not to sanitize the found HTML of <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tags.</li>
 <li><strong>first</strong> – Whether or not to return just the first result.</li>
 <li><strong>_encoding</strong> – The encoding format.</li>
 </ul>

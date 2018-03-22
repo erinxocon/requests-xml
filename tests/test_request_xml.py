@@ -99,8 +99,8 @@ def test_XML_loading():
     xml = XML(xml=doc)
 
     assert 'http://www.nasa.gov/image-feature/under-the-midnight-sun' in xml.links
-    assert isinstance(html.raw_xml, bytes)
-    assert isinstance(html.xml, str)
+    assert isinstance(xml.raw_xml, bytes)
+    assert isinstance(xml.xml, str)
 
 
 

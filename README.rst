@@ -55,14 +55,14 @@ Grab a list of all links on the page, as–is (this only works for RSS feeds, or
     ['http://www.nasa.gov/image-feature/from-the-earth-moon-and-beyond', 'http://www.nasa.gov/image-feature/jpl/pia21974/jupiter-s-colorful-cloud-belts', 'http://www.nasa.gov/', 'http://www.nasa.gov/image-feature/portrait-of-the-expedition-54-crew-on-the-space-station', ...]
 
 
-XPath is the main supported way to query an element. (`learn more <https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx>`_):
+XPath is the main supported way to query an element (`learn more <https://msdn.microsoft.com/en-us/library/ms256086(v=vs.110).aspx>`_):
 
 .. code-block:: pycon
 
    >>> item = r.html.xpath('//item', first=True)
    <Element 'item' >
 
-Grab an text contents:
+Grab an element's text contents:
 
 .. code-block:: pycon
 
@@ -74,7 +74,7 @@ Grab an text contents:
     Wed, 21 Mar 2018 14:12 EDT
     NASA Image of the Day
 
-Introspect an elements attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
+Introspect an element's attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
 
 .. code-block:: pycon
 
@@ -82,7 +82,7 @@ Introspect an elements attributes (`learn more <https://developer.mozilla.org/en
     >>> rss.attrs
     {'version': '2.0', '{http://www.w3.org/XML/1998/namespace}base': 'http://www.nasa.gov/'}
 
-Render out an elements XML (note: namespaces will be applied to sub elements when grabbed):
+Render out an element's XML (note: namespaces will be applied to sub elements when grabbed):
 
 .. code-block:: pycon
 
@@ -114,7 +114,7 @@ Search for text on the page.  This is useful if you wish to search out things be
 
 
 Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
-contains certain text.  This can be used as another easy way to grab an element without an xpath:
+contains certain text.  This can be used as another easy way to grab an element without an XPath:
 
 .. code-block:: pycon
 
@@ -126,7 +126,7 @@ contains certain text.  This can be used as another easy way to grab an element 
 
 Note: XPath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
 an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
-to work with straight xml, go for it!
+to work with straight XML, go for it!
 
 JSON Support
 ============

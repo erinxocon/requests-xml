@@ -224,15 +224,7 @@ class BaseParser:
 
         return _get_first_or_list(elements, first)
 
-    def search(self, template: str) -> Result:
-        """Search the :class:`Element <Element>` for the given Parse template.
-
-        :param template: The Parse template to use.
-        """
-
-        return findall(template, self.xml)
-
-    def search_all(self, template: str) -> _Result:
+    def search(self, template: str) -> _Result:
         """Search the :class:`Element <Element>` (multiple times) for the given parse
         template.
 

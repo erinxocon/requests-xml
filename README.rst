@@ -18,7 +18,7 @@ When using this library you automatically get:
 
 - *XPath Selectors*, for the *brave* at heart.
 - *Simple Search/Find* for the *faint* at heart.
-- XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_
+- XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_.
 - Mocked user-agent (like a real web browser).
 - Connection–pooling and cookie persistence.
 - The Requests experience you know and love, with magical XML parsing abilities.
@@ -105,7 +105,7 @@ Search for links within an element:
     ['http://www.nasa.gov/image-feature/the-beauty-of-light']
 
 
-Search for text on the page.  This is useful if you wish to search out things between specific tags without using xpath:
+Search for text on the page.  This is useful if you wish to search out things between specific tags without using XPath:
 
 .. code-block:: pycon
 
@@ -124,7 +124,7 @@ contains certain text.  This can be used as another easy way to grab an element 
     >>> light_title[0].text
     'The Beauty of Light'
 
-Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+Note: XPath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
 an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
 to work with straight xml, go for it!
 

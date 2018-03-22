@@ -25,6 +25,7 @@ rope = "*"
 "e1839a8" = {path = ".", editable = true}
 ipython = "*"
 sphinx = "*"
+requests-file = "*"
 
 
 [scripts]

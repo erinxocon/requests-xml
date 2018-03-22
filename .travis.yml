@@ -9,7 +9,7 @@ install:
 
 # command to run the dependencies
 script:
-  - "pipenv run tests"
+  - "pipenv run pytest -v -m ok"
 
 # command to run tests
 # jobs:

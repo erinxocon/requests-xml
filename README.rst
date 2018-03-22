@@ -111,6 +111,16 @@ Search for text on the page.  This is useful if you wish to search out things be
     >>> r.xml.search('<title>{}</title>)
     <Result ('NASA Image of the Day',) {}>
 
+Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
+contains certain text:
+
+.. code-block:: pycon
+
+    >>> light_title = r.xml.find('title', containing='The Beauty of Light')
+    [<Element 'title' >]
+
+    >>> light_title[0].text
+    'The Beauty of Light'
 
 JSON Support
 ============

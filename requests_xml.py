@@ -208,7 +208,6 @@ class BaseParser:
         :class:`Element <Element>` objects or a single one.
 
         :param selector: XPath Selector to use.
-        :param clean: Whether or not to sanitize the found HTML of ``<script>`` and ``<style>`` tags.
         :param first: Whether or not to return just the first result.
         :param _encoding: The encoding format.
 
@@ -247,10 +246,12 @@ class BaseParser:
     def find(self, selector: str = '*', containing: _Containing = None, first: bool = False, _encoding: str = None) -> _Find:
             """Given a simple element name, returns a list of
             :class:`Element <Element>` objects or a single one.
+
             :param selector: Element name to find.
             :param containing: If specified, only return elements that contain the provided text.
             :param first: Whether or not to return just the first result.
             :param _encoding: The encoding format.
+
             If ``first`` is ``True``, only returns the first
             :class:`Element <Element>` found.
             """

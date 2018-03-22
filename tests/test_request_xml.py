@@ -82,18 +82,24 @@ def test_xpath():
     items = r.xml.xpath('//item')
     assert len(items) == 60
 
+@pytest.mark.ok
+def test_find():
+    r = get()
+    title_the = r.xml.find('title', containing='The')
+    assert len(title_the) == 25
+
 
 @pytest.mark.ok
 def test_XML_loading():
     doc = """
     <item>
-      <title>Under the Midnight Sun</title>
-      <link>http://www.nasa.gov/image-feature/under-the-midnight-sun</link>
-      <description>In September 2017, a new iceberg calved from Pine Island Glacier—one of the main outlets where the West Antarctic Ice Sheet flows into the ocean.</description>
-      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pineisland_oli_2017349_lrg.jpg" length="5783827" type="image/jpeg"/>
-      <guid isPermaLink="false">http://www.nasa.gov/image-feature/under-the-midnight-sun</guid>
-      <pubDate>Fri, 29 Dec 2017 10:23 EST</pubDate>
-      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+        <title>Under the Midnight Sun</title>
+        <link>http://www.nasa.gov/image-feature/under-the-midnight-sun</link>
+        <description>In September 2017, a new iceberg calved from Pine Island Glacier—one of the main outlets where the West Antarctic Ice Sheet flows into the ocean.</description>
+        <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pineisland_oli_2017349_lrg.jpg" length="5783827" type="image/jpeg"/>
+        <guid isPermaLink="false">http://www.nasa.gov/image-feature/under-the-midnight-sun</guid>
+        <pubDate>Fri, 29 Dec 2017 10:23 EST</pubDate>
+        <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
     </item>
     """
     xml = XML(xml=doc)

@@ -23,8 +23,9 @@ mypy = "*"
 pytest-asyncio = "*"
 rope = "*"
 "e1839a8" = {path = ".", editable = true}
-Sphinx = "*"
+sphinx = "*"
 requests-file = "*"
+ipython = "*"
 
 
 [scripts]

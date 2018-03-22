@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Requests-XML: XML Parsing for Humans &#8212; requests-XML v0.3.4 documentation</title>
+    <title>Requests-XML: XML Parsing for Humans &#8212; requests-XML v0.2.2 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" src="_static/documentation_options.js"></script>
@@ -34,6 +34,8 @@
 <div class="toctree-wrapper compound">
 </div>
 <a class="reference external image-reference" href="https://travis-ci.org/erinxocon/requests-xml"><img alt="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" src="https://travis-ci.org/erinxocon/requests-xml.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/requests-xml/"><img alt="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" /></a>
 <p>This library intends to make parsing XML as
 simple and intuitive as possible.  It is related
 to the amazing <a class="reference external" href="http://html.python-requests.org/">requests-html</a>
@@ -42,6 +44,7 @@ some more support for pure XML!</p>
 <p>When using this library you automatically get:</p>
 <ul class="simple">
 <li><em>XPath Selectors</em>, for the <em>brave</em> at heart.</li>
+<li><em>Simple Search/Find</em> for the <em>faint</em> at heart.</li>
 <li>XML to JSON conversion thanks to <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a></li>
 <li>Mocked user-agent (like a real web browser).</li>
 <li>Connection–pooling and cookie persistence.</li>
@@ -111,6 +114,18 @@ some more support for pure XML!</p>
 <span class="go">&lt;Result (&#39;NASA Image of the Day&#39;,) {}&gt;</span>
 </pre></div>
 </div>
+<p>Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
+contains certain text.  This can be used as another easy way to grab an element without an xpath:</p>
+<div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">light_title</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">containing</span><span class="o">=</span><span class="s1">&#39;The Beauty of Light&#39;</span><span class="p">)</span>
+<span class="go">[&lt;Element &#39;title&#39; &gt;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">light_title</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+<span class="go">&#39;The Beauty of Light&#39;</span>
+</pre></div>
+</div>
+<p>Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
+to work with straight xml, go for it!</p>
 </div>
 <div class="section" id="json-support">
 <h1>JSON Support<a class="headerlink" href="#json-support" title="Permalink to this headline">¶</a></h1>
@@ -184,6 +199,19 @@ If you wish to use a different conversion convention, pass in a string with the 
 </dd></dl>
 
 <dl class="method">
+<dt id="requests_xml.XML.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>selector: str = '*'</em>, <em>containing: Union[str</em>, <em>typing.List[str]] = None</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Element')], _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.XML.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a simple element name, returns a list of
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.
+:param selector: Element name to find.
+:param containing: If specified, only return elements that contain the provided text.
+:param first: Whether or not to return just the first result.
+:param _encoding: The encoding format.
+If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="requests_xml.XML.json">
 <code class="descname">json</code><span class="sig-paren">(</span><em>conversion: str = 'badgerfish'</em><span class="sig-paren">)</span> &#x2192; Mapping<a class="headerlink" href="#requests_xml.XML.json" title="Permalink to this definition">¶</a></dt>
 <dd><p>A JSON Representation of the XML.  Default is badgerfish.
@@ -219,22 +247,8 @@ of the <a class="reference internal" href="#requests_xml.Element" title="request
 
 <dl class="method">
 <dt id="requests_xml.XML.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; parse.Result<a class="headerlink" href="#requests_xml.XML.search" title="Permalink to this definition">¶</a></dt>
-<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given Parse template.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="requests_xml.XML.search_all">
-<code class="descname">search_all</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Result')], _ForwardRef('Result')]<a class="headerlink" href="#requests_xml.XML.search_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> (multiple times) for the given parse
+<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em>, <em>first: bool = False</em><span class="sig-paren">)</span> &#x2192; List[_ForwardRef('Result')]<a class="headerlink" href="#requests_xml.XML.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given parse
 template.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -262,7 +276,7 @@ template.</p>
 
 <dl class="method">
 <dt id="requests_xml.XML.xpath">
-<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>clean: bool = False</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.XML.xpath" title="Permalink to this definition">¶</a></dt>
+<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.XML.xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given an XPath selector, returns a list of
 <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -320,6 +334,19 @@ for more details.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="requests_xml.Element.find">
+<code class="descname">find</code><span class="sig-paren">(</span><em>selector: str = '*'</em>, <em>containing: Union[str</em>, <em>typing.List[str]] = None</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Element')], _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.Element.find" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a simple element name, returns a list of
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.
+:param selector: Element name to find.
+:param containing: If specified, only return elements that contain the provided text.
+:param first: Whether or not to return just the first result.
+:param _encoding: The encoding format.
+If <code class="docutils literal notranslate"><span class="pre">first</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, only returns the first
+<a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> found.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="requests_xml.Element.json">
 <code class="descname">json</code><span class="sig-paren">(</span><em>conversion: str = 'badgerfish'</em><span class="sig-paren">)</span> &#x2192; Mapping<a class="headerlink" href="#requests_xml.Element.json" title="Permalink to this definition">¶</a></dt>
 <dd><p>A JSON Representation of the XML.  Default is badgerfish.
@@ -355,22 +382,8 @@ of the <a class="reference internal" href="#requests_xml.Element" title="request
 
 <dl class="method">
 <dt id="requests_xml.Element.search">
-<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; parse.Result<a class="headerlink" href="#requests_xml.Element.search" title="Permalink to this definition">¶</a></dt>
-<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given Parse template.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>template</strong> – The Parse template to use.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="requests_xml.Element.search_all">
-<code class="descname">search_all</code><span class="sig-paren">(</span><em>template: str</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[_ForwardRef('Result')], _ForwardRef('Result')]<a class="headerlink" href="#requests_xml.Element.search_all" title="Permalink to this definition">¶</a></dt>
-<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> (multiple times) for the given parse
+<code class="descname">search</code><span class="sig-paren">(</span><em>template: str</em>, <em>first: bool = False</em><span class="sig-paren">)</span> &#x2192; List[_ForwardRef('Result')]<a class="headerlink" href="#requests_xml.Element.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search the <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> for the given parse
 template.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -398,7 +411,7 @@ template.</p>
 
 <dl class="method">
 <dt id="requests_xml.Element.xpath">
-<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>clean: bool = False</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.Element.xpath" title="Permalink to this definition">¶</a></dt>
+<code class="descname">xpath</code><span class="sig-paren">(</span><em>selector: str</em>, <em>*</em>, <em>first: bool = False</em>, <em>_encoding: str = None</em><span class="sig-paren">)</span> &#x2192; Union[typing.List[str], typing.List[_ForwardRef('Element')], str, _ForwardRef('Element')]<a class="headerlink" href="#requests_xml.Element.xpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given an XPath selector, returns a list of
 <a class="reference internal" href="#requests_xml.Element" title="requests_xml.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a> objects or a single one.</p>
 <table class="docutils field-list" frame="void" rules="none">

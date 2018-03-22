@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/" version="2.0" xml:base="http://www.nasa.gov/">
+  <channel>
+    <title>NASA Image of the Day</title>
+    <description>The latest NASA "Image of the Day" image.</description>
+    <link>http://www.nasa.gov/</link>
+    <atom:link rel="self" href="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss"/>
+    <language>en-us</language>
+    <managingEditor>yvette.smith-1@nasa.gov</managingEditor>
+    <webMaster>brian.dunbar@nasa.gov</webMaster>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <item>
+      <title>The Beauty of Light</title>
+      <link>http://www.nasa.gov/image-feature/the-beauty-of-light</link>
+      <description>The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg" length="1267028" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/the-beauty-of-light</guid>
+      <pubDate>Wed, 21 Mar 2018 14:12 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Space Station Bound!</title>
+      <link>http://www.nasa.gov/image-feature/space-station-bound</link>
+      <description>Workers are seen on the launch pad as the Soyuz rocket arrives after being rolled out by train, Monday, March 19, 2018 at the Baikonur Cosmodrome in Kazakhstan.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/27024283098_4f984e095a_o.jpg" length="7180222" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/space-station-bound</guid>
+      <pubDate>Tue, 20 Mar 2018 11:25 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Going for Atmospheric GOLD</title>
+      <link>http://www.nasa.gov/image-feature/going-for-atmospheric-gold</link>
+      <description>In late Jan. 2018, NASA’s Global-scale Observations of the Limb and Disk (GOLD) instrument was launched into space aboard a commercial satellite.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/iss054e005626_lrg.jpg" length="505029" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/going-for-atmospheric-gold</guid>
+      <pubDate>Mon, 19 Mar 2018 10:30 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Rose-Colored Jupiter</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21981/rose-colored-jupiter</link>
+      <description>This image captures a close-up view of a storm with bright cloud tops in the northern hemisphere of Jupiter.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21981.jpg" length="410054" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21981/rose-colored-jupiter</guid>
+      <pubDate>Fri, 16 Mar 2018 09:11 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>The Aurora Named STEVE</title>
+      <link>http://www.nasa.gov/image-feature/the-aurora-named-steve</link>
+      <description>What's in a name? If your name is Strong Thermal Emission Velocity Enhancement aka STEVE, then there's quite bit behind the name.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/25937026477_4b7949e87d_o.jpg" length="5439235" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/the-aurora-named-steve</guid>
+      <pubDate>Thu, 15 Mar 2018 10:29 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>There's Always Pi!</title>
+      <link>http://www.nasa.gov/image-feature/theres-always-pi</link>
+      <description>Just by determining how circular a given crater is – using pi and the crater’s perimeter and area – planetary geologists can reveal clues about how the crater was formed and the surface that was impacted.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia20661_hires.jpg" length="268326" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/theres-always-pi</guid>
+      <pubDate>Wed, 14 Mar 2018 09:00 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Running a Real-Time Simulation of Go-No-Go for Apollo 17</title>
+      <link>http://www.nasa.gov/image-feature/running-a-real-time-simulation-of-go-no-go-for-apollo-17</link>
+      <description>Not everyone gets to become a part of history, but mathematician Billie Robertson is one of the lucky ones. In this image taken on Nov. 27, 1972, she was running a real-time simulation of Translunar Injection (TLI) Go-No-Go for the Apollo 17 lunar landing mission.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/billie_robertson_cropped_0.jpg" length="2743922" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/running-a-real-time-simulation-of-go-no-go-for-apollo-17</guid>
+      <pubDate>Tue, 13 Mar 2018 09:00 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Dramatic Dione</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia17197/dramatic-dione</link>
+      <description>Cassini captured this striking view of Saturn’s moon Dione on July 23, 2012.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia17197-1041.jpg" length="42700" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia17197/dramatic-dione</guid>
+      <pubDate>Mon, 12 Mar 2018 09:40 EDT</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Veggies in Space!</title>
+      <link>http://www.nasa.gov/image-feature/veggies-in-space</link>
+      <description>The crew aboard the International Space Station have grown two batches of mixed greens (mizuna, red romaine lettuce and tokyo bekana cabbage), and are now running two Veggie facilities simultaneously.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/iss054e054071_0.jpg" length="2756484" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/veggies-in-space</guid>
+      <pubDate>Fri, 09 Mar 2018 11:10 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Imaging the Universe</title>
+      <link>http://www.nasa.gov/image-feature/imaging-the-universe</link>
+      <description>Known as the 'Mother of Hubble,' Nancy Grace Roman is shown here at the Yerkes Observatory, University of Chicago in 1948, where she was studying for her doctorate in astronomy.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/ngr_1948_yerkestelescope.jpg" length="1388235" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/imaging-the-universe</guid>
+      <pubDate>Thu, 08 Mar 2018 09:29 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Structural Test Version of the Intertank for NASA's New Deep Space Rocket</title>
+      <link>http://www.nasa.gov/exploration/systems/sls/multimedia/structural-test-version-of-the-intertank-for-sls</link>
+      <description>The intertank is the second piece of structural hardware for the massive Space Launch System core stage, built at NASA's Michoud Assembly Facility in New Orleans and delivered to Marshall Space Flight Center for testing.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/msfc-20180306-sls-itunload-1.jpg" length="7037953" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/exploration/systems/sls/multimedia/structural-test-version-of-the-intertank-for-sls</guid>
+      <pubDate>Wed, 07 Mar 2018 08:31 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>The Case of the Martian Boulder Piles</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia22334/the-case-of-the-martian-boulder-piles</link>
+      <description>This image was originally meant to track the movement of sand dunes near the North Pole of Mars, but what's on the ground in between the dunes is just as interesting!</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia22334-1041.jpg" length="284684" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia22334/the-case-of-the-martian-boulder-piles</guid>
+      <pubDate>Tue, 06 Mar 2018 09:27 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Building the Space Station</title>
+      <link>http://www.nasa.gov/image-feature/building-the-space-station</link>
+      <description>Astronauts Joan Higginbotham (foreground) and Suni Williams refer to a procedures checklist as they work the controls of the Canadarm2, in this 2006 image.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/iss014e09635_1.jpg" length="1054490" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/building-the-space-station</guid>
+      <pubDate>Mon, 05 Mar 2018 10:59 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Jovian ‘Twilight Zone’</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21980/jovian-twilight-zone</link>
+      <description>This image captures the swirling cloud formations around the south pole of Jupiter, looking up toward the equatorial region.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21980.jpg" length="990760" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21980/jovian-twilight-zone</guid>
+      <pubDate>Fri, 02 Mar 2018 09:19 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Next-Generation Weather Satellite GOES-S Lifts Off</title>
+      <link>http://www.nasa.gov/image-feature/next-generation-weather-satellite-goes-s-lifts-off</link>
+      <description>A ULA Atlas V rocket lifts off from Space Launch Complex 41 at Cape Canaveral Air Force Station carrying the NOAA Geostationary Operational Environmental Satellite, or GOES-S. Launch was at 5:02 p.m. EST, March 1, 2018. GOES-S is the second satellite in a series of next-generation weather satellites.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/39853231794_48d98dbeb5_o.jpg" length="8099308" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/next-generation-weather-satellite-goes-s-lifts-off</guid>
+      <pubDate>Thu, 01 Mar 2018 20:20 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>'Twas the Night Before Launch</title>
+      <link>http://www.nasa.gov/image-feature/twas-the-night-before-launch</link>
+      <description>The Geostationary Operational Environmental Satellite (GOES-S) satellite sits on the launch pad at Space Launch Complex 41, Cape Canaveral Air Force Station, backdropped by the setting Sun. GOES-S is slated to lift off on March 1 at 5:02 p.m. EST.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/goes-s_20180228.jpg" length="8300880" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/twas-the-night-before-launch</guid>
+      <pubDate>Thu, 01 Mar 2018 09:55 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Soyuz With Expedition 54 Trio Aboard Returns to Earth</title>
+      <link>http://www.nasa.gov/image-feature/soyuz-with-expedition-54-trio-aboard-returns-to-earth</link>
+      <description>The Soyuz MS-06 spacecraft is seen as it lands with Expedition 54 crew members Joe Acaba and Mark Vande Hei of NASA and cosmonaut Alexander Misurkin near the town of Zhezkazgan, Kazakhstan on Wednesday, Feb. 28, 2018 (February 27 Eastern time).</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/40528908571_b5d655f369_o.jpg" length="5887407" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/soyuz-with-expedition-54-trio-aboard-returns-to-earth</guid>
+      <pubDate>Wed, 28 Feb 2018 09:35 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Portrait of the Expedition 54 Crew on the Space Station</title>
+      <link>http://www.nasa.gov/image-feature/portrait-of-the-expedition-54-crew-on-the-space-station</link>
+      <description>The six-member Expedition 54 crew poses for a lighthearted crew portrait inside the Japanese Kibo laboratory module on Feb. 18, 2018. Three of the crew members are packed up and prepared to return to Earth today, Tuesday, Feb. 27.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/40398158532_e964189eb9_o.jpg" length="2918474" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/portrait-of-the-expedition-54-crew-on-the-space-station</guid>
+      <pubDate>Tue, 27 Feb 2018 11:12 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>An Intersection of Land, Ice, Sea and Clouds</title>
+      <link>http://www.nasa.gov/image-feature/an-intersection-of-land-ice-sea-and-clouds</link>
+      <description>Though sea ice has been significantly below normal extent and thickness across much of the Arctic, the ice in the Labrador Sea has been relatively close to normal.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/labrador_tmo_2018049_lrg.jpg" length="6683404" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/an-intersection-of-land-ice-sea-and-clouds</guid>
+      <pubDate>Mon, 26 Feb 2018 10:15 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Time-lapse Sequence of Jupiter’s South Pole</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21979/time-lapse-sequence-of-jupiter-s-south-pole</link>
+      <description>This series of images captures cloud patterns near Jupiter's south pole, looking up towards the planet’s equator.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21979.jpg" length="251734" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21979/time-lapse-sequence-of-jupiter-s-south-pole</guid>
+      <pubDate>Fri, 23 Feb 2018 08:37 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Robert Lawrence: America's First African-American Astronaut</title>
+      <link>http://www.nasa.gov/image-feature/robert-lawrence-americas-first-african-american-astronaut</link>
+      <description>On June 30, 1967, the U.S. Air Force selcted Maj. Robert H. Lawrence, Jr. for the Manned Orbiting Laboratory, Authorized in August 1965, a program which envisioned a series of mini-space stations in low polar Earth orbit.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/lawrence-with-f104_0.jpg" length="214127" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/robert-lawrence-americas-first-african-american-astronaut</guid>
+      <pubDate>Thu, 22 Feb 2018 08:54 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Orion’s Powerhouse</title>
+      <link>http://www.nasa.gov/image-feature/orion-s-powerhouse</link>
+      <description>A technician works on the European Service Module that will propel the Orion spacecraft in space and provide air, water and electricity for future crews.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/2018-01-esm1.jpg" length="382654" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/orion-s-powerhouse</guid>
+      <pubDate>Wed, 21 Feb 2018 10:39 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Destination: History</title>
+      <link>http://www.nasa.gov/image-feature/destination-history</link>
+      <description>On Feb. 20, 1962, John Glenn made history by becoming the first U.S. astronaut to orbit the place we call home--planet Earth.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/s62-00955.jpg" length="695929" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/destination-history</guid>
+      <pubDate>Tue, 20 Feb 2018 10:51 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Jupiter’s Swirling Cloud Formations</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21978/jupiter-s-swirling-cloud-formations</link>
+      <description>See swirling cloud formations in the northern area of Jupiter's north temperate belt in this new view taken by NASA’s Juno spacecraft.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21978-opt.jpg" length="979052" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21978/jupiter-s-swirling-cloud-formations</guid>
+      <pubDate>Thu, 15 Feb 2018 16:47 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Clyde Foster</title>
+      <link>http://www.nasa.gov/centers/marshall/history/clyde-foster-2.html</link>
+      <description>In June 1975, Marshall management named Clyde Foster to the position of director of the Equal Opportunity Office where he directed and administered a comprehensive program to assure equal opportunity in the conduct of all operations undertaken by the Center and its contractors.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/clyde_foster_2.jpg" length="424466" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/centers/marshall/history/clyde-foster-2.html</guid>
+      <pubDate>Wed, 14 Feb 2018 14:11 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>An Icy Heart</title>
+      <link>http://www.nasa.gov/image-feature/an-icy-heart</link>
+      <description>Operation IceBridge, NASA’s longest running survey of the state of polar ice, shattered records in 2017.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/25377431947_1df0c45e26_o.jpg" length="1800846" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/an-icy-heart</guid>
+      <pubDate>Wed, 14 Feb 2018 10:21 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Preparing for Space</title>
+      <link>http://www.nasa.gov/image-feature/preparing-for-space</link>
+      <description>In this image from 2009, NASA astronaut Stephanie Wilson is attired in a training version of her shuttle launch and entry suit.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/jsc2009e207967.jpg" length="2118177" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/preparing-for-space</guid>
+      <pubDate>Tue, 13 Feb 2018 10:49 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>The State of NASA</title>
+      <link>http://www.nasa.gov/image-feature/the-state-of-nasa</link>
+      <description>Acting NASA Administrator Robert Lightfoot discusses the fiscal year 2019 budget proposal during a State of NASA address Monday, Feb. 12, 2018.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/40228975041_e8071bfa17_o.jpg" length="9947914" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/the-state-of-nasa</guid>
+      <pubDate>Mon, 12 Feb 2018 15:20 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>A View of the Winter Olympics From Above</title>
+      <link>http://www.nasa.gov/image-feature/a-view-of-the-winter-olympics-from-above</link>
+      <description>Since the Winter Olympics were first held in 1924, they only have been hosted twice in Asia, both times in Japan. This year the games will find a new home in South Korea, in the northeastern cities of Pyeongchang and Gangneung, visible in this natural-color image acquired on Jan. 26, 2018.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/southkorea_oli_2018026_lrg.jpg" length="2531425" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/a-view-of-the-winter-olympics-from-above</guid>
+      <pubDate>Fri, 09 Feb 2018 11:07 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Splitting Slope Streaks</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia22240/splitting-slope-streaks</link>
+      <description>This image from NASA's Mars Reconnaissance Orbiter (MRO) shows streaks forming on slopes when dust cascades downhill.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia22240.jpg" length="822835" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia22240/splitting-slope-streaks</guid>
+      <pubDate>Thu, 08 Feb 2018 06:01 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Columbus: Celebrating 10 Years of Science on Station</title>
+      <link>http://www.nasa.gov/image-feature/columbus-celebrating-10-years-of-science-on-station</link>
+      <description>The European Space Agency's Columbus module celebrates 10 years of science on the International Space Station.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/9805325555_6315123835_o.jpg" length="1526308" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/columbus-celebrating-10-years-of-science-on-station</guid>
+      <pubDate>Wed, 07 Feb 2018 10:21 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>December 2006: Constructing the Space Station</title>
+      <link>http://www.nasa.gov/image-feature/december-2006-constructing-the-space-station</link>
+      <description>NASA astronaut Robert Curbeam works on the International Space Station's S1 truss during the space shuttle Discovery's STS-116 mission in Dec. 2006.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/s116e05968.jpg" length="1063514" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/december-2006-constructing-the-space-station</guid>
+      <pubDate>Tue, 06 Feb 2018 09:30 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>A Lunar Tribute to Former NASA Chief Exploration Scientist</title>
+      <link>http://www.nasa.gov/image-feature/a-lunar-tribute-to-former-nasa-chief-exploration-scientist</link>
+      <description>Lunar crater is named after former NASA chief exploration scientist.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/wargo_aug2017_web_resolution.jpg" length="725329" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/a-lunar-tribute-to-former-nasa-chief-exploration-scientist</guid>
+      <pubDate>Mon, 05 Feb 2018 10:44 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Observations From -369.7 Degrees Fahrenheit</title>
+      <link>http://www.nasa.gov/image-feature/observations-from-3697-degrees-fahrenheit</link>
+      <description>Taken from inside Chamber A at the Johnson Space Center in September 2017, this image shows the James Webb Space Telescope as it was undergoing cryogenic testing and the temperature was approximately -369.7 degrees Fahrenheit.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/39110614315_8ea44e1316_o.jpg" length="749899" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/observations-from-3697-degrees-fahrenheit</guid>
+      <pubDate>Fri, 02 Feb 2018 11:01 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Helping to Create the Future of Space Travel</title>
+      <link>http://www.nasa.gov/image-feature/helping-to-create-the-future-of-space-travel</link>
+      <description>Dr. Lonnie Reid had a long and storied career at NASA's Glenn Research Center. His expertise in the internal flow of advance aerospace propulsion systems was nationally recognized and he was influential in recruiting and mentoring the next generation of scientists and engineers.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/grc-1979-c-03640.jpg" length="4461288" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/helping-to-create-the-future-of-space-travel</guid>
+      <pubDate>Thu, 01 Feb 2018 14:10 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>International Space Station Transits the Full Moon</title>
+      <link>http://www.nasa.gov/image-feature/international-space-station-transits-the-full-moon</link>
+      <description>The International Space Station, with a crew of six onboard, is seen in silhouette as it transits the moon at roughly five miles per second on Tuesday, Jan. 30, 2018.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/25126840057_3925961d24_o.jpg" length="714465" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/international-space-station-transits-the-full-moon</guid>
+      <pubDate>Wed, 31 Jan 2018 05:36 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Saying Goodnight</title>
+      <link>http://www.nasa.gov/image-feature/saying-goodnight</link>
+      <description>Astronaut Mark Vande Hei took this image of the eastern U.S. and Canada at night, writing, "Good night from @Space_Station. DC, NY, Toronto, Cleveland, and surrounding areas!"</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/night.jpg" length="1874628" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/saying-goodnight</guid>
+      <pubDate>Tue, 30 Jan 2018 11:25 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Eroded Layers in Shalbatana Valles</title>
+      <link>http://www.nasa.gov/image-feature/jpl/eroded-layers-in-shalbatana-valles</link>
+      <description>Layers, probably sedimentary in origin, have undergone extensive erosion in this image from NASA's Mars Reconnaissance Orbiter (MRO) of Shalbatana Valles, a prominent channel that cuts through Xanthe Terra.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia22182.jpg" length="1456984" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/eroded-layers-in-shalbatana-valles</guid>
+      <pubDate>Mon, 29 Jan 2018 08:09 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Mark Vande Hei's 'Space-Selfie'</title>
+      <link>http://www.nasa.gov/image-feature/mark-vande-heis-space-selfie</link>
+      <description>On Tuesday, Jan. 23, 2018, spacewalker Mark Vande Hei snapped his own portrait, better known as a “space-selfie,” during the first spacewalk of the year.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/iss054e022843_0.jpg" length="2003569" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/mark-vande-heis-space-selfie</guid>
+      <pubDate>Fri, 26 Jan 2018 12:27 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Day of Remembrance 2018</title>
+      <link>http://www.nasa.gov/image-feature/day-of-remembrance-2018</link>
+      <description>On the last Thursday in January, NASA pays tribute to the crews of Apollo 1 and space shuttles Challenger and Columbia, as well as other NASA colleagues who lost their lives while furthering the cause of exploration and discovery.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/39185734754_303823b519_o_1.jpg" length="3983388" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/day-of-remembrance-2018</guid>
+      <pubDate>Thu, 25 Jan 2018 14:19 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Next Mars Lander Spreads Its Solar Wings</title>
+      <link>http://www.nasa.gov/image-feature/next-mars-lander-spreads-its-solar-wings</link>
+      <description>This image shows NASA's InSight lander after it was commanded to deploy its solar arrays to test and verify the exact process that it will use on the surface of the Red Planet.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia22204.jpg" length="2172936" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/next-mars-lander-spreads-its-solar-wings</guid>
+      <pubDate>Wed, 24 Jan 2018 12:02 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Signs of Ships in the Clouds</title>
+      <link>http://www.nasa.gov/image-feature/signs-of-ships-in-the-clouds</link>
+      <description>Ships churning through the Atlantic Ocean produced this patchwork of bright, criss-crossing cloud trails off the coast of Portugal and Spain.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/atlantic_amo_2018016_lrg.jpg" length="8464114" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/signs-of-ships-in-the-clouds</guid>
+      <pubDate>Tue, 23 Jan 2018 13:06 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Prepping the Parker Solar Probe for Space</title>
+      <link>http://www.nasa.gov/image-feature/prepping-the-parker-solar-probe-for-space</link>
+      <description>At NASA's Goddard Space Flight Center, the Parker Solar Probe is lowered into the 40-foot-tall thermal vacuum chamber. The thermal vacuum chamber simulates the harsh conditions that the spacecraft will experience on its journey through space, including near-vacuum conditions and severe hot and cold temperatures.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/5d1_6772.jpg" length="1418154" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/prepping-the-parker-solar-probe-for-space</guid>
+      <pubDate>Fri, 19 Jan 2018 11:05 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Jupiter’s Swirling South Pole</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21975/jupiter-s-swirling-south-pole</link>
+      <description>This image of Jupiter’s swirling south polar region was captured by NASA’s Juno spacecraft as it neared completion of its tenth close flyby of the gas giant planet.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21975-opt.jpg" length="346577" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21975/jupiter-s-swirling-south-pole</guid>
+      <pubDate>Thu, 18 Jan 2018 14:35 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Even in the Desert</title>
+      <link>http://www.nasa.gov/image-feature/even-in-the-desert</link>
+      <description>For the second time in three years, snow has accumulated in the desert near the northern Algerian town of Aïn Séfra.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/ainsefra_oli_2018008_oblique_lrg_1.jpg" length="174550" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/even-in-the-desert</guid>
+      <pubDate>Wed, 17 Jan 2018 10:37 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Three of the 'Thirty-Five New Guys'</title>
+      <link>http://www.nasa.gov/image-feature/three-of-the-thirty-five-new-guys</link>
+      <description>On January 16, 1978, NASA announces the first astronaut class in nine years, which included the first African Americans.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/s79-36529.jpg" length="2017662" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/three-of-the-thirty-five-new-guys</guid>
+      <pubDate>Tue, 16 Jan 2018 10:08 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Jupiter’s Colorful Cloud Belts</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21974/jupiter-s-colorful-cloud-belts</link>
+      <description>Colorful swirling cloud belts dominate Jupiter’s southern hemisphere in this image captured by NASA’s Juno spacecraft.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21974.jpg" length="2814808" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21974/jupiter-s-colorful-cloud-belts</guid>
+      <pubDate>Fri, 12 Jan 2018 12:13 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>All the Glittering Stars</title>
+      <link>http://www.nasa.gov/image-feature/all-the-glittering-stars</link>
+      <description>A new analysis of about 10,000 normal Sun-like stars in the Milky Way's galactic bulge reveals that our galaxy's hub is a dynamic environment.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/img1_0.png" length="8620833" type="image/png"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/all-the-glittering-stars</guid>
+      <pubDate>Thu, 11 Jan 2018 12:06 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Now This: The Apollo 11 Crew</title>
+      <link>http://www.nasa.gov/image-feature/now-this-the-apollo-11-crew</link>
+      <description>On Jan. 9, 1969, NASA announced the prime crew of the Apollo 11 lunar landing mission. This portrait was taken on Jan. 10, the day after the announcement of the crew assignment. From left to right are lunar module pilot Buzz Aldrin, commander Neil Armstrong; and command module pilot Michael Collins.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/31419815333_7aaa95bef0_o.jpg" length="1062834" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/now-this-the-apollo-11-crew</guid>
+      <pubDate>Wed, 10 Jan 2018 11:36 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>New Day</title>
+      <link>http://www.nasa.gov/image-feature/new-day</link>
+      <description>Sunrise as seen from the International Space Station. "A view of the sunrise from the ISS is a perfect start to a new day," so said @Anton_Astrey, otherwise known as cosmonaut Anton Shkaplerov, a member of the Expedition 54 crew aboard the International Space Station, orbiting 250 miles above the Earth.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/stationpic.jpg" length="96566" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/new-day</guid>
+      <pubDate>Tue, 09 Jan 2018 13:40 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Veil of Ice</title>
+      <link>http://www.nasa.gov/image-feature/jpl/pia21901/veil-of-ice</link>
+      <description>Saturn’s rings, made of countless icy particles, form a translucent veil in this view from NASA’s Cassini spacecraft.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pia21901-1041.jpg" length="353306" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/jpl/pia21901/veil-of-ice</guid>
+      <pubDate>Mon, 08 Jan 2018 10:14 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Winter Storm Pummels the East Coast</title>
+      <link>http://www.nasa.gov/image-feature/winter-storm-pummels-the-east-coast</link>
+      <description>Millions of people along the East Coast of the United States faced snow and ice, gusty winds, power outages, travel delays, school closings, and flooding as a rapidly-intensifying Nor’easter plowed northward during the first week of 2018.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/eastcoast_vir_2018004_lrg.jpg" length="9881751" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/winter-storm-pummels-the-east-coast</guid>
+      <pubDate>Fri, 05 Jan 2018 13:35 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Geocolor Image From NOAA's GOES-16 Satellite of Powerful East Coast Storm</title>
+      <link>http://www.nasa.gov/image-feature/geocolor-image-from-noaas-goes-16-satellite-of-powerful-east-coast-storm</link>
+      <description>This Geocolor image from NOAA's GOES-16 satellite captures the deepening storm off the East coast of the United States on Jan. 4, 2018, at 16:22 UTC. The powerful nor'easter is battering coastal areas with heavy snow and strong winds, from Florida to Maine.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/20180041622_goes16-abi-conus-geocolor-5000x3000.jpg" length="12869398" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/geocolor-image-from-noaas-goes-16-satellite-of-powerful-east-coast-storm</guid>
+      <pubDate>Thu, 04 Jan 2018 11:35 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>From Mercury Mark II to Project Gemini</title>
+      <link>http://www.nasa.gov/image-feature/from-mercury-mark-ii-to-project-gemini</link>
+      <description>On Jan. 3, 1962, the newly announced Mercury Mark II project was renamed Project Gemini. This artist's concept of a two-person Gemini spacecraft in flight shows a cutaway view.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/s65-14257.jpg" length="1211771" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/from-mercury-mark-ii-to-project-gemini</guid>
+      <pubDate>Wed, 03 Jan 2018 10:57 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>From the Earth, Moon and Beyond</title>
+      <link>http://www.nasa.gov/image-feature/from-the-earth-moon-and-beyond</link>
+      <description>THE OSIRIS-REx mission, which will map and return samples from asteroid Bennu, is expected to reach the asteroid in August, 2018. This composite image of the Earth and Moon is made from data captured by OSIRIS-REx's MapCam instrument on Oct. 2, 2017, when the spacecraft was approximately 3 million miles from Earth.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/full_1024x1024.png" length="432448" type="image/png"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/from-the-earth-moon-and-beyond</guid>
+      <pubDate>Tue, 02 Jan 2018 11:18 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Under the Midnight Sun</title>
+      <link>http://www.nasa.gov/image-feature/under-the-midnight-sun</link>
+      <description>In September 2017, a new iceberg calved from Pine Island Glacier—one of the main outlets where the West Antarctic Ice Sheet flows into the ocean.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pineisland_oli_2017349_lrg.jpg" length="5783827" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/under-the-midnight-sun</guid>
+      <pubDate>Fri, 29 Dec 2017 10:23 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Naples at Night</title>
+      <link>http://www.nasa.gov/image-feature/naples-at-night</link>
+      <description>An astronaut aboard the International Space Station took this photograph of the city lights of Naples and the Campania region of southern Italy.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/naples.jpg" length="8284685" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/naples-at-night</guid>
+      <pubDate>Thu, 28 Dec 2017 09:06 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Kwanzaa Tholus on Ceres</title>
+      <link>http://www.nasa.gov/image-feature/kwanzaa-tholus-on-ceres</link>
+      <description>These images show a subtle feature on dwarf planet Ceres called Kwanzaa Tholus.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/tholus.jpg" length="314831" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/kwanzaa-tholus-on-ceres</guid>
+      <pubDate>Wed, 27 Dec 2017 10:43 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Hubble's Holiday Nebula “Ornament”</title>
+      <link>http://www.nasa.gov/image-feature/goddard/2017/hubbles-holiday-nebula-ornament</link>
+      <description>The Hubble Space Telescope captured what looks like a colorful holiday ornament in space. It's actually an image of NGC 6326, a planetary nebula with glowing wisps of outpouring gas.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/potw1010a_0.jpg" length="298868" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/goddard/2017/hubbles-holiday-nebula-ornament</guid>
+      <pubDate>Fri, 22 Dec 2017 09:34 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    <item>
+      <title>Launch Day!</title>
+      <link>http://www.nasa.gov/image-feature/launch-day</link>
+      <description>On Dec. 21, 1968, the Apollo 8 crew leaves the Kennedy Space Center's then-named Manned Spacecraft Operations Building during the mission's prelaunch countdown on the way to their history-making lunar orbiting flight.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/s68-55999.jpg" length="3269472" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/launch-day</guid>
+      <pubDate>Thu, 21 Dec 2017 11:00 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+  </channel>
+</rss>

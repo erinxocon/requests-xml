@@ -57,7 +57,7 @@ XPath is the main supported way to query an element (`learn more <https://msdn.m
    >>> item = r.html.xpath('//item', first=True)
    <Element 'item' >
 
-Grab an :class:`Element <Element>`'s text contents:
+Grab an text contents:
 
 .. code-block:: pycon
 
@@ -69,7 +69,7 @@ Grab an :class:`Element <Element>`'s text contents:
     Wed, 21 Mar 2018 14:12 EDT
     NASA Image of the Day
 
-Introspect an :class:`Element <Element>`'s attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
+Introspect an elements attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
 
 .. code-block:: pycon
 
@@ -77,7 +77,7 @@ Introspect an :class:`Element <Element>`'s attributes (`learn more <https://deve
     >>> rss.attrs
     {'version': '2.0', '{http://www.w3.org/XML/1998/namespace}base': 'http://www.nasa.gov/'}
 
-Render out an :class:`Element <Element>`'s XML (note: namespaces will be applied to sub elements when grabbed):
+Render out an elements XML (note: namespaces will be applied to sub elements when grabbed):
 
 .. code-block:: pycon
 
@@ -85,7 +85,7 @@ Render out an :class:`Element <Element>`'s XML (note: namespaces will be applied
     '<item xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/"> <title>The Beauty of Light</title>\n <link>http://www.nasa.gov/image-feature/the-beauty-of-light</link>\n <description>The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.</description>\n <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg" length="1267028" type="image/jpeg"/>\n <guid isPermaLink="false">http://www.nasa.gov/image-feature/the-beauty-of-light</guid>\n <pubDate>Wed, 21 Mar 2018 14:12 EDT</pubDate>\n <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>\n</item>'
 
 
-Select an :class:`Element <Element>` list within an :class:`Element <Element>`:
+Select an element list within an element:
 
 .. code-block:: pycon
 

@@ -203,7 +203,7 @@ class BaseParser:
         return self._json
 
 
-    def xpath(self, selector: str, *, clean: bool = False, first: bool = False, _encoding: str = None) -> _XPath:
+    def xpath(self, selector: str, *, first: bool = False, _encoding: str = None) -> _XPath:
         """Given an XPath selector, returns a list of
         :class:`Element <Element>` objects or a single one.
 
@@ -244,7 +244,7 @@ class BaseParser:
         return _get_first_or_list(elements, first)
 
 
-    def find(self, selector: str = "*", *, containing: _Containing = None, first: bool = False, _encoding: str = None) -> _Find:
+    def find(self, selector: str = '*', containing: _Containing = None, first: bool = False, _encoding: str = None) -> _Find:
             """Given a simple element name, returns a list of
             :class:`Element <Element>` objects or a single one.
             :param selector: Element name to find.

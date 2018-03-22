@@ -42,208 +42,65 @@ async def test_async_file_get(async_get):
     assert r.status_code == 200
 
 
-# @pytest.mark.ok
-# def test_class_seperation():
-#     r = get()
+@pytest.mark.ok
+def test_attrs():
+    r = get()
+    rss = r.xml.xpath('/rss', first=True)
 
-#     about = r.html.find('#about', first=True)
-#     assert len(about.attrs['class']) == 2
-
-
-# @pytest.mark.ok
-# def test_css_selector():
-#     r = get()
-
-#     about = r.html.find('#about', first=True)
-
-#     for menu_item in (
-#         'About', 'Applications', 'Quotes', 'Getting Started', 'Help',
-#         'Python Brochure'
-#     ):
-#         assert menu_item in about.text.split('\n')
-#         assert menu_item in about.full_text.split('\n')
+    assert 'version' in rss.attrs
+    assert len(rss.attrs) == 2
 
 
-# @pytest.mark.ok
-# def test_containing():
-#     r = get()
+@pytest.mark.ok
+def test_links():
+    r = get()
 
-#     python = r.html.find(containing='python')
-#     assert len(python) == 191
-
-#     for e in python:
-#         assert 'python' in e.full_text.lower()
+    assert len(r.xml.links) == 61
 
 
-# @pytest.mark.ok
-# def test_attrs():
-#     r = get()
-#     about = r.html.find('#about', first=True)
+@pytest.mark.ok
+@pytest.mark.asyncio
+async def test_async_links(async_get):
+    r = await async_get()
 
-#     assert 'aria-haspopup' in about.attrs
-#     assert len(about.attrs['class']) == 2
-
-
-# @pytest.mark.ok
-# def test_links():
-#     r = get()
-#     about = r.html.find('#about', first=True)
-
-#     assert len(about.links) == 6
-#     assert len(about.absolute_links) == 6
+    assert len(r.xml.links) == 61
 
 
-# @pytest.mark.ok
-# @pytest.mark.asyncio
-# async def test_async_links(async_get):
-#     r = await async_get()
-#     about = r.html.find('#about', first=True)
-
-#     assert len(about.links) == 6
-#     assert len(about.absolute_links) == 6
+@pytest.mark.ok
+def test_search():
+    r = get()
+    style = r.xml.search('NASA {} of the Day')[0][0]
+    assert style == 'Image'
 
 
-# @pytest.mark.ok
-# def test_search():
-#     r = get()
-#     style = r.html.search('Python is a {} language')[0]
-#     assert style == 'programming'
+@pytest.mark.ok
+def test_xpath():
+    r = get()
+    xml = r.xml.xpath('/rss', first=True)
+    assert '2.0' in xml.attrs['version']
+
+    items = r.xml.xpath('//item')
+    assert len(items) == 60
 
 
-# @pytest.mark.ok
-# def test_xpath():
-#     r = get()
-#     html = r.html.xpath('/html', first=True)
-#     assert 'no-js' in html.attrs['class']
+@pytest.mark.ok
+def test_XML_loading():
+    doc = """
+    <item>
+      <title>Under the Midnight Sun</title>
+      <link>http://www.nasa.gov/image-feature/under-the-midnight-sun</link>
+      <description>In September 2017, a new iceberg calved from Pine Island Glacier—one of the main outlets where the West Antarctic Ice Sheet flows into the ocean.</description>
+      <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/pineisland_oli_2017349_lrg.jpg" length="5783827" type="image/jpeg"/>
+      <guid isPermaLink="false">http://www.nasa.gov/image-feature/under-the-midnight-sun</guid>
+      <pubDate>Fri, 29 Dec 2017 10:23 EST</pubDate>
+      <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>
+    </item>
+    """
+    xml = XML(xml=doc)
 
-#     a_hrefs = r.html.xpath('//a/@href')
-#     assert '#site-map' in a_hrefs
-
-
-# @pytest.mark.ok
-# def test_html_loading():
-#     doc = """<a href='https://httpbin.org'>"""
-#     html = HTML(html=doc)
-
-#     assert 'https://httpbin.org' in html.links
-#     assert isinstance(html.raw_html, bytes)
-#     assert isinstance(html.html, str)
-
-
-# @pytest.mark.ok
-# def test_anchor_links():
-#     r = get()
-#     r.html.skip_anchors = False
-
-#     assert '#site-map' in r.html.links
-
-
-# @pytest.mark.ok
-# @pytest.mark.parametrize('url,link,expected', [
-#     ('http://example.com/', 'test.html', 'http://example.com/test.html'),
-#     ('http://example.com', 'test.html', 'http://example.com/test.html'),
-#     ('http://example.com/foo/', 'test.html', 'http://example.com/foo/test.html'),
-#     ('http://example.com/foo/bar', 'test.html', 'http://example.com/foo/test.html'),
-#     ('http://example.com/foo/', '/test.html', 'http://example.com/test.html'),
-#     ('http://example.com/', 'http://xkcd.com/about/', 'http://xkcd.com/about/'),
-#     ('http://example.com/', '//xkcd.com/about/', 'http://xkcd.com/about/'),
-# ])
-# def test_absolute_links(url, link, expected):
-#     head_template = """<head><base href='{}'></head>"""
-#     body_template = """<body><a href='{}'>Next</a></body>"""
-
-#     # Test without `<base>` tag (url is base)
-#     html = HTML(html=body_template.format(link), url=url)
-#     assert html.absolute_links.pop() == expected
-
-#     # Test with `<base>` tag (url is other)
-#     html = HTML(
-#         html=head_template.format(url) + body_template.format(link),
-#         url='http://example.com/foobar/')
-#     assert html.absolute_links.pop() == expected
-
-
-# @pytest.mark.render
-# def test_render():
-#     r = get()
-#     script = """
-#     () => {
-#         return {
-#             width: document.documentElement.clientWidth,
-#             height: document.documentElement.clientHeight,
-#             deviceScaleFactor: window.devicePixelRatio,
-#         }
-#     }
-#     """
-#     val = r.html.render(script=script)
-#     for value in ('width', 'height', 'deviceScaleFactor'):
-#         assert value in val
-
-#     about = r.html.find('#about', first=True)
-#     assert len(about.links) == 6
-
-
-# @pytest.mark.render
-# def test_bare_render():
-#     doc = """<a href='https://httpbin.org'>"""
-#     html = HTML(html=doc)
-#     script = """
-#         () => {
-#             return {
-#                 width: document.documentElement.clientWidth,
-#                 height: document.documentElement.clientHeight,
-#                 deviceScaleFactor: window.devicePixelRatio,
-#             }
-#         }
-#     """
-#     val = html.render(script=script, reload=False)
-#     for value in ('width', 'height', 'deviceScaleFactor'):
-#         assert value in val
-
-#     assert html.find('html')
-#     assert 'https://httpbin.org' in html.links
-
-
-# @pytest.mark.render
-# def test_bare_js_eval():
-#     doc = """
-#     <!DOCTYPE html>
-#     <html>
-#     <body>
-#     <div id="replace">This gets replaced</div>
-
-#     <script type="text/javascript">
-#       document.getElementById("replace").innerHTML = "yolo";
-#     </script>
-#     </body>
-#     </html>
-#     """
-
-#     html = HTML(html=doc)
-#     html.render()
-
-#     assert html.find('#replace', first=True).text == 'yolo'
-
-
-# @pytest.mark.ok
-# def test_browser_session():
-#     """ Test browser instaces is created and properly close when session is closed.
-#         Note: session.close method need to be tested together with browser creation,
-#             since no doing that will left the browser running. """
-#     session = HTMLSession()
-#     assert isinstance(session.browser, Browser)
-#     assert hasattr(session, "loop") == True
-#     session.close()
-#     # assert count_chromium_process() == 0
-
-
-# @pytest.mark.ok
-# def test_browser_process():
-#     for _ in range(3):
-#         r = get()
-#         r.html.render()
-
-#         assert r.html.page == None
+    assert 'http://www.nasa.gov/image-feature/under-the-midnight-sun' in xml.links
+    assert isinstance(html.raw_xml, bytes)
+    assert isinstance(html.xml, str)
 
 
 

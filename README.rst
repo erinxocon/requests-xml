@@ -133,9 +133,9 @@ JSON Support
 
 Using the great `xmljson <https://github.com/sanand0/xmljson/>`_ package, we convert the whole
 XML document into a JSON representation.  There are six different conversion convetions available.
-See the `about <https://github.com/sanand0/xmljson#about>`_ for what they are.  The default is `badgerfish`.
+See the `about <https://github.com/sanand0/xmljson#about>`_ for what they are.  The default is ``badgerfish``.
 If you wish to use a different conversion convention, pass in a string with the name of the convetion to the
-`.json()` method.
+``.json()`` method.
 
 
 Using without Requests

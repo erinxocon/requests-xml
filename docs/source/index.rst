@@ -15,6 +15,10 @@ Requests-XML: XML Parsing for Humans
 
 .. image:: https://travis-ci.org/erinxocon/requests-xml.svg?branch=master
     :target: https://travis-ci.org/erinxocon/requests-xml
+.. image:: https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000
+    :target: https://pypi.python.org/pypi/requests-xml/
+.. image:: https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000
+    :target: https://opensource.org/licenses/MIT
 
 This library intends to make parsing XML as
 simple and intuitive as possible.  It is related
@@ -25,6 +29,7 @@ some more support for pure XML!
 When using this library you automatically get:
 
 - *XPath Selectors*, for the *brave* at heart.
+- *Simple Search/Find* for the *faint* at heart.
 - XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_
 - Mocked user-agent (like a real web browser).
 - Connection–pooling and cookie persistence.
@@ -118,6 +123,22 @@ Search for text on the page.  This is useful if you wish to search out things be
 
     >>> r.xml.search('<title>{}</title>)
     <Result ('NASA Image of the Day',) {}>
+
+
+Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
+contains certain text.  This can be used as another easy way to grab an element without an xpath:
+
+.. code-block:: pycon
+
+    >>> light_title = r.xml.find('title', containing='The Beauty of Light')
+    [<Element 'title' >]
+
+    >>> light_title[0].text
+    'The Beauty of Light'
+
+Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
+to work with straight xml, go for it!
 
 
 JSON Support

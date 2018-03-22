@@ -17,6 +17,7 @@ some more support for pure XML!
 When using this library you automatically get:
 
 - *XPath Selectors*, for the *brave* at heart.
+- *Simple Search/Find* for the *faint* at heart.
 - XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_
 - Mocked user-agent (like a real web browser).
 - Connection–pooling and cookie persistence.

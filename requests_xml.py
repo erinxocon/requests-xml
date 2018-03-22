@@ -24,7 +24,7 @@ useragent = None
 
 # Typing.
 _XPath = Union[List[str], List['Element'], str, 'Element']
-_Result = Union[List['Result'], 'Result']
+_Result = List['Result']
 _XML = Union[str, bytes]
 _BaseXML = str
 _UserAgent = str
@@ -37,6 +37,7 @@ _Search = Result
 _Containing = Union[str, List[str]]
 _Links = Set[str]
 _Attrs = MutableMapping
+_Find = Union[List['Element'], 'Element']
 
 # Sanity checking.
 try:
@@ -66,6 +67,7 @@ class BaseParser:
         self._docinfo = None
         self._json = None
 
+
     @property
     def raw_xml(self) -> _RawXML:
         """Bytes representation of the XML content.
@@ -75,6 +77,7 @@ class BaseParser:
             return self._xml
         else:
             return etree.tostring(self.element, encoding='unicode').strip().encode(self.encoding)
+
 
     @property
     def xml(self) -> _BaseXML:
@@ -86,14 +89,17 @@ class BaseParser:
         else:
             return etree.tostring(self.element, encoding='unicode').strip()
 
+
     @xml.setter
     def xml(self, xml: str) -> None:
         self._xml = xml.encode(self.encoding)
+
 
     @raw_xml.setter
     def raw_xml(self, xml: bytes) -> None:
         """Property setter for self.html."""
         self._xml = xml
+
 
     @property
     def pq(self) -> PyQuery:
@@ -128,6 +134,7 @@ class BaseParser:
         """All found links on page, in as–is form.  Only works for Atom feeds."""
         return list(set(x.text for x in self.xpath('//link')))
 
+
     @property
     def docinfo(self) -> etree.DocInfo:
         if self._docinfo is None:
@@ -159,6 +166,7 @@ class BaseParser:
             self._encoding = html_to_unicode(self.default_encoding, self._xml)[0]
 
         return self._encoding if self._encoding else self.default_encoding
+
 
     @encoding.setter
     def encoding(self, enc: str) -> None:
@@ -224,13 +232,50 @@ class BaseParser:
 
         return _get_first_or_list(elements, first)
 
-    def search(self, template: str) -> _Result:
-        """Search the :class:`Element <Element>` (multiple times) for the given parse
+
+    def search(self, template: str, first: bool = False) -> _Result:
+        """Search the :class:`Element <Element>` for the given parse
         template.
 
         :param template: The Parse template to use.
         """
-        return [r for r in findall(template, self.xml)]
+        elements = [r for r in findall(template, self.xml)]
+
+        return _get_first_or_list(elements, first)
+
+
+    def find(self, selector: str = "*", *, containing: _Containing = None, first: bool = False, _encoding: str = None) -> _Find:
+            """Given a simple element name, returns a list of
+            :class:`Element <Element>` objects or a single one.
+            :param selector: Element name to find.
+            :param containing: If specified, only return elements that contain the provided text.
+            :param first: Whether or not to return just the first result.
+            :param _encoding: The encoding format.
+            If ``first`` is ``True``, only returns the first
+            :class:`Element <Element>` found.
+            """
+
+            # Convert a single containing into a list.
+            if isinstance(containing, str):
+                containing = [containing]
+
+            encoding = _encoding or self.encoding
+            elements = [
+                Element(element=found, default_encoding=encoding)
+                for found in self.pq(selector)
+            ]
+
+            if containing:
+                elements_copy = elements.copy()
+                elements = []
+
+                for element in elements_copy:
+                    if any([c.lower() in element.text.lower() for c in containing]):
+                        elements.append(element)
+
+                elements.reverse()
+
+            return _get_first_or_list(elements, first)
 
 
 class Element(BaseParser):

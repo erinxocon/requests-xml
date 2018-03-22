@@ -37,15 +37,14 @@
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/requests-xml/"><img alt="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/v/requests-xml.svg?maxAge=2592000" /></a>
 <a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" src="https://img.shields.io/pypi/l/requests-xml.svg?maxAge=2592000" /></a>
 <p>This library intends to make parsing XML as
-simple and intuitive as possible.  It is related
-to the amazing <a class="reference external" href="http://html.python-requests.org/">requests-html</a>
-and has much of the same experience, just with
-some more support for pure XML!</p>
+simple and intuitive as possible.  <strong>Requests-XML</strong> is related
+to the amazing <a class="reference external" href="http://html.python-requests.org/">Requests-HTML</a>
+and delivers the same quality of user experience — with support for our beloved XML documents.</p>
 <p>When using this library you automatically get:</p>
 <ul class="simple">
 <li><em>XPath Selectors</em>, for the <em>brave</em> at heart.</li>
 <li><em>Simple Search/Find</em> for the <em>faint</em> at heart.</li>
-<li>XML to JSON conversion thanks to <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a></li>
+<li>XML to JSON conversion thanks to <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a>.</li>
 <li>Mocked user-agent (like a real web browser).</li>
 <li>Connection–pooling and cookie persistence.</li>
 <li>The Requests experience you know and love, with magical XML parsing abilities.</li>
@@ -78,7 +77,7 @@ some more support for pure XML!</p>
 <span class="go">&lt;Element &#39;item&#39; &gt;</span>
 </pre></div>
 </div>
-<p>Grab an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s text contents:</p>
+<p>Grab an element’s text contents:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 <span class="go">The Beauty of Light</span>
 <span class="go">http://www.nasa.gov/image-feature/the-beauty-of-light</span>
@@ -88,18 +87,18 @@ some more support for pure XML!</p>
 <span class="go">NASA Image of the Day</span>
 </pre></div>
 </div>
-<p>Introspect an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s attributes (<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes">learn more</a>):</p>
+<p>Introspect an element’s attributes (<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes">learn more</a>):</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">rss</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//rss&#39;</span><span class="p">,</span> <span class="n">first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">rss</span><span class="o">.</span><span class="n">attrs</span>
 <span class="go">{&#39;version&#39;: &#39;2.0&#39;, &#39;{http://www.w3.org/XML/1998/namespace}base&#39;: &#39;http://www.nasa.gov/&#39;}</span>
 </pre></div>
 </div>
-<p>Render out an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>’s XML (note: namespaces will be applied to sub elements when grabbed):</p>
+<p>Render out an element’s XML (note: namespaces will be applied to sub elements when grabbed):</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span><span class="o">.</span><span class="n">xml</span>
 <span class="go">&#39;&lt;item xmlns:atom=&quot;http://www.w3.org/2005/Atom&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:itunes=&quot;http://www.itunes.com/dtds/podcast-1.0.dtd&quot; xmlns:media=&quot;http://search.yahoo.com/mrss/&quot;&gt; &lt;title&gt;The Beauty of Light&lt;/title&gt;\n &lt;link&gt;http://www.nasa.gov/image-feature/the-beauty-of-light&lt;/link&gt;\n &lt;description&gt;The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.&lt;/description&gt;\n &lt;enclosure url=&quot;http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg&quot; length=&quot;1267028&quot; type=&quot;image/jpeg&quot;/&gt;\n &lt;guid isPermaLink=&quot;false&quot;&gt;http://www.nasa.gov/image-feature/the-beauty-of-light&lt;/guid&gt;\n &lt;pubDate&gt;Wed, 21 Mar 2018 14:12 EDT&lt;/pubDate&gt;\n &lt;source url=&quot;http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss&quot;&gt;NASA Image of the Day&lt;/source&gt;\n&lt;/item&gt;&#39;</span>
 </pre></div>
 </div>
-<p>Select an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code> list within an <code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code>:</p>
+<p>Select an element list within an element:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">item</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;//enclosure&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span>
 <span class="go">&#39;http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg&#39;</span>
 </pre></div>
@@ -109,13 +108,13 @@ some more support for pure XML!</p>
 <span class="go">[&#39;http://www.nasa.gov/image-feature/the-beauty-of-light&#39;]</span>
 </pre></div>
 </div>
-<p>Search for text on the page.  This is useful if you wish to search out things between specific tags without using xpath:</p>
+<p>Search for text on the page.  This is useful if you wish to search out things between specific tags without using XPath:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;&lt;title&gt;{}&lt;/title&gt;)</span>
 <span class="go">&lt;Result (&#39;NASA Image of the Day&#39;,) {}&gt;</span>
 </pre></div>
 </div>
 <p>Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
-contains certain text.  This can be used as another easy way to grab an element without an xpath:</p>
+contains certain text.  This can be used as another easy way to grab an element without an XPath:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">light_title</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">containing</span><span class="o">=</span><span class="s1">&#39;The Beauty of Light&#39;</span><span class="p">)</span>
 <span class="go">[&lt;Element &#39;title&#39; &gt;]</span>
 
@@ -123,17 +122,17 @@ contains certain text.  This can be used as another easy way to grab an element 
 <span class="go">&#39;The Beauty of Light&#39;</span>
 </pre></div>
 </div>
-<p>Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+<p>Note: XPath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
 an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
-to work with straight xml, go for it!</p>
+to work with straight XML, go for it!</p>
 </div>
 <div class="section" id="json-support">
 <h1>JSON Support<a class="headerlink" href="#json-support" title="Permalink to this headline">¶</a></h1>
 <p>Using the great <a class="reference external" href="https://github.com/sanand0/xmljson/">xmljson</a> package, we convert the whole
 XML document into a JSON representation.  There are six different conversion convetions available.
-See the <a class="reference external" href="https://github.com/sanand0/xmljson#about">about</a> for what they are.  The default is <cite>badgerfish</cite>.
+See the <a class="reference external" href="https://github.com/sanand0/xmljson#about">about</a> for what they are.  The default is <code class="docutils literal notranslate"><span class="pre">badgerfish</span></code>.
 If you wish to use a different conversion convention, pass in a string with the name of the convetion to the
-<cite>.json()</cite> method.</p>
+<code class="docutils literal notranslate"><span class="pre">.json()</span></code> method.</p>
 </div>
 <div class="section" id="using-without-requests">
 <h1>Using without Requests<a class="headerlink" href="#using-without-requests" title="Permalink to this headline">¶</a></h1>
@@ -169,6 +168,10 @@ If you wish to use a different conversion convention, pass in a string with the 
 <span class="go">}</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="license">
+<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
+<p>MIT</p>
 </div>
 <div class="section" id="api-documentation">
 <h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>

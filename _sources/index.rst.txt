@@ -21,16 +21,15 @@ Requests-XML: XML Parsing for Humans
     :target: https://opensource.org/licenses/MIT
 
 This library intends to make parsing XML as
-simple and intuitive as possible.  It is related
-to the amazing `requests-html <http://html.python-requests.org/>`_
-and has much of the same experience, just with
-some more support for pure XML!
+simple and intuitive as possible.  **Requests-XML** is related
+to the amazing `Requests-HTML <http://html.python-requests.org/>`_
+and delivers the same quality of user experience — with support for our beloved XML documents.
 
 When using this library you automatically get:
 
 - *XPath Selectors*, for the *brave* at heart.
 - *Simple Search/Find* for the *faint* at heart.
-- XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_
+- XML to JSON conversion thanks to `xmljson <https://github.com/sanand0/xmljson/>`_.
 - Mocked user-agent (like a real web browser).
 - Connection–pooling and cookie persistence.
 - The Requests experience you know and love, with magical XML parsing abilities.
@@ -74,7 +73,7 @@ XPath is the main supported way to query an element (`learn more <https://msdn.m
    >>> item = r.html.xpath('//item', first=True)
    <Element 'item' >
 
-Grab an :class:`Element <Element>`'s text contents:
+Grab an element's text contents:
 
 .. code-block:: pycon
 
@@ -86,7 +85,7 @@ Grab an :class:`Element <Element>`'s text contents:
     Wed, 21 Mar 2018 14:12 EDT
     NASA Image of the Day
 
-Introspect an :class:`Element <Element>`'s attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
+Introspect an element's attributes (`learn more <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes>`_):
 
 .. code-block:: pycon
 
@@ -94,7 +93,7 @@ Introspect an :class:`Element <Element>`'s attributes (`learn more <https://deve
     >>> rss.attrs
     {'version': '2.0', '{http://www.w3.org/XML/1998/namespace}base': 'http://www.nasa.gov/'}
 
-Render out an :class:`Element <Element>`'s XML (note: namespaces will be applied to sub elements when grabbed):
+Render out an element's XML (note: namespaces will be applied to sub elements when grabbed):
 
 .. code-block:: pycon
 
@@ -102,7 +101,7 @@ Render out an :class:`Element <Element>`'s XML (note: namespaces will be applied
     '<item xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/"> <title>The Beauty of Light</title>\n <link>http://www.nasa.gov/image-feature/the-beauty-of-light</link>\n <description>The Soyuz MS-08 rocket is launched with Soyuz Commander Oleg Artemyev of Roscosmos and astronauts Ricky Arnold and Drew Feustel of NASA, March 21, 2018, to join the crew of the Space Station.</description>\n <enclosure url="http://www.nasa.gov/sites/default/files/thumbnails/image/nhq201803210005.jpg" length="1267028" type="image/jpeg"/>\n <guid isPermaLink="false">http://www.nasa.gov/image-feature/the-beauty-of-light</guid>\n <pubDate>Wed, 21 Mar 2018 14:12 EDT</pubDate>\n <source url="http://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss">NASA Image of the Day</source>\n</item>'
 
 
-Select an :class:`Element <Element>` list within an :class:`Element <Element>`:
+Select an element list within an element:
 
 .. code-block:: pycon
 
@@ -117,7 +116,7 @@ Search for links within an element:
     ['http://www.nasa.gov/image-feature/the-beauty-of-light']
 
 
-Search for text on the page.  This is useful if you wish to search out things between specific tags without using xpath:
+Search for text on the page.  This is useful if you wish to search out things between specific tags without using XPath:
 
 .. code-block:: pycon
 
@@ -126,7 +125,7 @@ Search for text on the page.  This is useful if you wish to search out things be
 
 
 Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
-contains certain text.  This can be used as another easy way to grab an element without an xpath:
+contains certain text.  This can be used as another easy way to grab an element without an XPath:
 
 .. code-block:: pycon
 
@@ -136,19 +135,18 @@ contains certain text.  This can be used as another easy way to grab an element 
     >>> light_title[0].text
     'The Beauty of Light'
 
-Note: Xpath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
+Note: XPath is preferred as it can allow you to get very specific with your element selection.  Find is intended to be
 an easy way of grabbing all elements of a certain name.  Find does however accept CSS selectors, and if you can get those
-to work with straight xml, go for it!
-
+to work with straight XML, go for it!
 
 JSON Support
 ============
 
 Using the great `xmljson <https://github.com/sanand0/xmljson/>`_ package, we convert the whole
 XML document into a JSON representation.  There are six different conversion convetions available.
-See the `about <https://github.com/sanand0/xmljson#about>`_ for what they are.  The default is `badgerfish`.
+See the `about <https://github.com/sanand0/xmljson#about>`_ for what they are.  The default is ``badgerfish``.
 If you wish to use a different conversion convention, pass in a string with the name of the convetion to the
-`.json()` method.
+``.json()`` method.
 
 
 Using without Requests
@@ -187,6 +185,10 @@ You can also use this library without Requests:
             }
         }]
     }
+
+License
+=======
+MIT
 
 
 API Documentation

@@ -9,10 +9,9 @@ Requests-XML: XML Parsing for Humans
     :target: https://opensource.org/licenses/MIT
 
 This library intends to make parsing XML as
-simple and intuitive as possible.  It is related
-to the amazing `requests-html <http://html.python-requests.org/>`_
-and has much of the same experience, just with
-some more support for pure XML!
+simple and intuitive as possible.  **Requests-XML** is related
+to the amazing `Requests-HTML <http://html.python-requests.org/>`_
+and delivers the same quality of user experience — with support for our beloved XML documents.
 
 When using this library you automatically get:
 
@@ -174,3 +173,7 @@ You can also use this library without Requests:
             }
         }]
     }
+
+License
+=======
+MIT

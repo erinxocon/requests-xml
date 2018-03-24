@@ -17,7 +17,7 @@ DESCRIPTION = 'XML Parsing for humans.'
 URL = 'https://github.com/erinxocon/requests-xml'
 EMAIL = 'erinocon5@gmail.com'
 AUTHOR = "Erin O'Connell"
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 
 # What packages are required for this module to be executed?
 REQUIRED = [

@@ -58,7 +58,7 @@ XPath is the main supported way to query an element (`learn more <https://msdn.m
 
 .. code-block:: pycon
 
-   >>> item = r.html.xpath('//item', first=True)
+   >>> item = r.xml.xpath('//item', first=True)
    <Element 'item' >
 
 Grab an element's text contents:

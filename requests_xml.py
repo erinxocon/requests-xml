@@ -12,7 +12,7 @@ import requests
 from pyquery import PyQuery
 from fake_useragent import UserAgent
 import lxml
-from lxml import etree, xslt
+from lxml import etree
 from parse import search as parse_search
 from parse import findall, Result
 from w3lib.encoding import html_to_unicode

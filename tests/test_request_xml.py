@@ -107,8 +107,3 @@ def test_XML_loading():
     assert 'http://www.nasa.gov/image-feature/under-the-midnight-sun' in xml.links
     assert isinstance(xml.raw_xml, bytes)
     assert isinstance(xml.xml, str)
-
-
-
-if __name__ == '__main__':
-    test_containing()

@@ -279,7 +279,7 @@ class BaseParser:
             return _get_first_or_list(elements, first)
 
 
-    def apply_stylesheet(self, stylesheet: XML) -> XML:
+    def apply_stylesheet(self, stylesheet: 'XML') -> 'XML':
         transform = etree.XSLT(xslt_input=stylesheet.lxml)
         result = transform(self.lxml)
         return XML(xml=str(result))

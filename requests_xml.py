@@ -12,7 +12,7 @@ import requests
 from pyquery import PyQuery
 from fake_useragent import UserAgent
 import lxml
-from lxml import etree
+from lxml import etree, xslt
 from parse import search as parse_search
 from parse import findall, Result
 from w3lib.encoding import html_to_unicode
@@ -343,12 +343,12 @@ class XML(BaseParser):
 class XMLResponse(requests.Response):
     """An XML-enabled :class:`requests.Response <requests.Response>` object.
     Effectively the same, but with an intelligent ``.xml`` property added.
-    The json method has also been changed to show a json representation of the xml.
     """
 
     def __init__(self) -> None:
         super(XMLResponse, self).__init__()
         self._xml = None # type: HTML
+
 
     @property
     def xml(self) -> XML:
@@ -363,6 +363,10 @@ class XMLResponse(requests.Response):
         xml_r = cls()
         xml_r.__dict__.update(response.__dict__)
         return xml_r
+
+
+def transform(doc: XML, stylesheet: XML) -> XML:
+    raise NotImplementedError()
 
 
 def user_agent(style=None) -> _UserAgent:

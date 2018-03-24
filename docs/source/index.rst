@@ -124,7 +124,7 @@ Search for text on the page.  This is useful if you wish to search out things be
     <Result ('NASA Image of the Day',) {}>
 
 
-Using PyQuery we can use tag selectors to easily grab an element, with a simple syntax for ensuring the element
+Using PyQuery we can use CSS selectors to easily grab an element, with a simple syntax for ensuring the element
 contains certain text.  This can be used as another easy way to grab an element without an XPath:
 
 .. code-block:: pycon

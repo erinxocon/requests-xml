@@ -130,4 +130,4 @@ def test_XML_XSLT():
 
     assert isinstance(result, XML)
     foo = result.xpath('//foo')
-    assert 'Text' is in foo[0].text
+    assert 'Text' in foo[0].text

@@ -107,3 +107,27 @@ def test_XML_loading():
     assert 'http://www.nasa.gov/image-feature/under-the-midnight-sun' in xml.links
     assert isinstance(xml.raw_xml, bytes)
     assert isinstance(xml.xml, str)
+
+
+@pytest.mark.ok
+def test_XML_XSLT():
+    doc = """
+    <a><b>Text</b></a>
+    """
+    xml = XML(xml=doc)
+
+    style_doc = """
+    <xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:template match="/">
+            <foo><xsl:value-of select="/a/b/text()" /></foo>
+        </xsl:template>
+    </xsl:stylesheet>
+    """
+    stylesheet = XML(xml=style_doc)
+
+    result = xml.apply_stylesheet(stylesheet)
+
+    assert isinstance(result, XML)
+    foo = result.xpath('//foo')
+    assert 'Text' is in foo[0].text

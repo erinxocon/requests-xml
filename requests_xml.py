@@ -114,7 +114,7 @@ class BaseParser:
     @property
     def lxml(self) -> _LXML:
         """`lxml <http://lxml.de>`_ representation of the
-        :class:`Element <Element>` or :class:`HTML <HTML>`.
+        :class:`Element <Element>` or :class:`XML <XML>`.
         """
         if self._lxml is None:
             self._lxml = etree.fromstring(self.raw_xml)
@@ -124,7 +124,7 @@ class BaseParser:
     @property
     def text(self) -> _Text:
         """The text content of the
-        :class:`Element <Element>` or :class:`HTML <HTML>`.
+        :class:`Element <Element>` or :class:`XML <XML>`.
         """
         return self.pq.text()
 
@@ -279,6 +279,12 @@ class BaseParser:
             return _get_first_or_list(elements, first)
 
 
+    def apply_stylesheet(self, stylesheet: XML) -> XML:
+        transform = etree.XSLT(xslt_input=stylesheet.lxml)
+        result = transform(self.lxml)
+        return XML(xml=str(result))
+
+
 class Element(BaseParser):
     """An element of HTML.
 
@@ -363,10 +369,6 @@ class XMLResponse(requests.Response):
         xml_r = cls()
         xml_r.__dict__.update(response.__dict__)
         return xml_r
-
-
-def transform(doc: XML, stylesheet: XML) -> XML:
-    raise NotImplementedError()
 
 
 def user_agent(style=None) -> _UserAgent:
